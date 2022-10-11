@@ -1,0 +1,55 @@
+@startuml
+
+actor User as u
+actor Admin as a
+entity WebUI as wui
+entity MobileUI as mui
+control WebApp as wa
+control MobileApp as ma
+database Database as d
+
+
+u -> mui : login()
+mui -> ma : reportDown()
+ma -> d : query()
+
+mui -> ma : checkStatus()
+ma -> d : query()
+ma <-- d : return
+mui <-- ma : returnStatus
+u <- mui : logout()
+
+
+u -> wui : login()
+wui -> ma : reportDown()
+ma -> d : query()
+
+wui -> ma : checkStatu()
+ma -> d : query()
+ma <-- d : return
+wui <-- ma : return
+u <- wui : logout()
+
+
+a -> mui : login()
+mui -> ma : reportDown()
+ma -> d : query()
+
+mui -> ma : checkStatus()
+ma -> d : query()
+ma <-- d : return
+mui <-- ma : returnStatus
+a <- mui : logout()
+
+
+a -> wui : login()
+wui -> ma : reportDown()
+ma -> d : query()
+
+wui -> ma : checkStatu()
+ma -> d : query()
+ma <-- d : return
+wui <-- ma : return
+a <- wui : logout()
+
+@enduml
