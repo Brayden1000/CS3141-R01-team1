@@ -1,0 +1,22 @@
+CREATE TABLE UserData (
+    email varchar(255) PRIMARY KEY, 
+    isVerified BIT(1)
+);
+CREATE TABLE ElevatorInfo (
+    id int PRIMARY KEY,
+    location varchar(255),
+    downReports int,
+    isDownVerified BIT(1),
+    timeVerified TIMESTAMP,
+    whoVerified varchar,
+    FOREIGN KEY (whoVerified) REFERENCES UserData(email)
+);
+    
+CREATE TABLE DownReports ( 
+    id int PRIMARY KEY, 
+    elevatorId int,
+    reporter varchar(255), 
+    comment TINYTEXT, 
+    FOREIGN KEY (reporter) REFERENCES UserData(email),
+    FOREIGN KEY (elevatorID) REFERENCES ElevatorInfo(id)
+);
