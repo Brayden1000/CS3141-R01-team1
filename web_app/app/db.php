@@ -10,4 +10,46 @@ function connectDB() {
         echo "Connection failed: " . $e->getMessage();
     }
 }
+
+function addUser($email) {
+    $dbh = connectDB();
+    $statement1 = $dbh->prepare("INSERT INTO UserData (email, isVerified) VALUES (:email, 0)");
+    $statement1->bindParam(":email", $email);
+    $statement1->execute();
+
+    $dbh = null;
+}
+
+function verifyUser($email) {
+    $dbh = connectDB();
+    $statement1 = $dbh->prepare("UPDATE UserData SET isVerified = 1 WHERE email = :email;");
+    $statement1->bindParam(":email", $email);
+    $statement1->execute();
+
+    $dbh = null;
+}
+
+function verifyElevator($elevatorId) {
+    $dbh = connectDB();
+
+    $statement1 = $dbh->prepare("UPDATE ElevatorInfo
+                                 SET isDownVerified = 1, timeSinceVerified = :timeSince, whoVerified = :email
+                                WHERE elevatorId = :elevatorId;");
+    $statement1->bindParam(":elevatorId", $elevatorId);
+    $statement1->bindParam(":email", $email);
+    $statement1->bindParam(":timeSince", time());
+
+    $statement1->execute();
+
+    $dbh = null;
+}
+
+function makeUserReport($userEmail, $elevatorId, $comment) {
+    $dbh = connectDB();
+
+    $statement1 = $dbh->prepare("UPDATE ElevatorInfo SET downReports += 1  WHERE elevatorId = :elevatorId;");
+    $statement1->bindParam(":elevatorId", $elevatorId);
+
+    $statement2 = $dbh->prepare("INSERT INTO DownReports (email, isVerified) VALUES (:email, 0)");
+}
 ?>
