@@ -6,11 +6,8 @@ $dbh = connectDB(); //Connect to database
 
 // Just some test PHP to make sure that the database and php is working together. (UPDATE: It works)
 if ( isset($_POST["test"]) ) {
-    echo "In if";
-    $statement1 = $dbh->prepare("INSERT INTO UserData (email, isVerified) VALUES (:email, 0)");
-    $statement1->bindParam(":email", $_POST["email"]);
-    $statement1->execute();
-
+    echo "\n";
+    addUser($_POST["email"]);
 }
 ?>
     

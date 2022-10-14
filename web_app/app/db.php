@@ -13,11 +13,25 @@ function connectDB() {
 
 function addUser($email) {
     $dbh = connectDB();
-    $statement1 = $dbh->prepare("INSERT INTO UserData (email, isVerified) VALUES (:email, 0)");
-    $statement1->bindParam(":email", $email);
-    $statement1->execute();
+
+    if (checkUser($email)) {
+        $statement1 = $dbh->prepare("INSERT INTO UserData (email, isVerified) VALUES (:email, 0)");
+        $statement1->bindParam(":email", $email);
+        $statement1->execute();
+    } else {
+        echo "Invalid Email";
+    }
 
     $dbh = null;
+}
+
+function checkUser($email) {
+    $arr = explode("@", $email);
+    if ($arr[1] == "mtu.edu") {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 function verifyUser($email) {
