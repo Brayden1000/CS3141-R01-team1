@@ -2,54 +2,151 @@
 
 actor User as u
 actor Admin as a
-entity WebUI as wui
 entity MobileUI as mui
+entity WebUI as wui
 control WebApp as wa
-control MobileApp as ma
+collections Google as g
 database Database as d
 
 
-u -> mui : login()
-mui -> ma : reportDown()
-ma -> d : query()
+u -> wui : signUp()
+activate wui
+a -> wui : signUp()
+wui -> wa : addUser()
+activate wa
+wa -> g : addUser()
+activate g
 
-mui -> ma : checkStatus()
-ma -> d : query()
-ma <-- d : return
-mui <-- ma : returnStatus
-u <- mui : logout()
+alt Has MTU account
+g -> d : storeCredentials()
+activate d
+g <-- d : stored
+deactivate d
+wa <-- g : added
+wui <-- wa : added
+ 
+else Doesn't have MTU account
+wa <-- g : notAdded
+deactivate g
+wui <-- wa : notAdded
+deactivate wa
+deactivate wui
 
+end
 
 u -> wui : login()
-wui -> ma : reportDown()
-ma -> d : query()
+activate wui
+wui -> wa : verifyUser()
+activate wa
+wa -> g: verifyUser()
+activate g
 
-wui -> ma : checkStatu()
-ma -> d : query()
-ma <-- d : return
-wui <-- ma : return
+alt Successful login
+g -> d: verifyUser()
+activate d
+g <-- d : verified
+deactivate d
+wa <-- g : verified
+wui <-- wa : verified
+
+else Failed login
+wa <-- g : failed
+deactivate g
+wui <-- wa : failed
+deactivate wa
+end
+
+wui -> wa : makeUserReport()
+activate wa
+wa -> d : makeUserReport()
+activate d
+wa <-- d : reported
+deactivate d
+wui <-- wa : reported
+deactivate wa
+
+wui -> wa : listElevatorStatus()
+activate wa
+wa -> d : checkStatus()
+activate d
+wa <-- d : returnStatus
+deactivate d
+wui <-- wa : displayStatus
+deactivate wa
 u <- wui : logout()
+deactivate wui
 
 
+u -> mui : login()
+activate mui
 a -> mui : login()
-mui -> ma : reportDown()
-ma -> d : query()
-
-mui -> ma : checkStatus()
-ma -> d : query()
-ma <-- d : return
-mui <-- ma : returnStatus
+mui -> wa : The mobile app performs the same\noperations as the web app so the\nsequence isn't included for redundency.\nThis is true for both user and admin.
+activate wa
+mui <-- wa :
+deactivate wa
 a <- mui : logout()
+u <- mui : logout()
+deactivate mui
 
 
 a -> wui : login()
-wui -> ma : reportDown()
-ma -> d : query()
+activate wui
+wui -> wa : verifyUser()
+activate wa
+wa -> g: verifyUser()
+activate g
 
-wui -> ma : checkStatu()
-ma -> d : query()
-ma <-- d : return
-wui <-- ma : return
+alt Successful login
+g -> d: verifyUser()
+activate d
+g <-- d : verified
+deactivate d
+wa <-- g : verified
+wui <-- wa : verified
+
+else Failed login
+wa <-- g : failed
+deactivate g
+wui <-- wa : failed
+deactivate wa
+end
+
+wui -> wa : getReportNumber()
+activate wa
+wa -> d : getReportNumber()
+activate d
+wa <-- d : returnReportNumber
+deactivate d
+wui <-- wa : returnReportNumber
+deactivate wa
+
+wui -> wa : getReports()
+activate wa
+wa -> d : getReports()
+activate d
+wa <-- d : returnReports
+deactivate d
+wui <-- wa : returnReports
+deactivate wa
+
+wui -> wa : verifyElevatorDown()
+activate wa
+wa -> d : verifyElevatorDown()
+activate d
+wa <-- d : verified
+deactivate d
+wui <-- wa : verified
+deactivate wa
+
+wui -> wa : listElevatorStatus()
+activate wa
+wa -> d : checkStatus()
+activate d
+wa <-- d : returnStatus
+deactivate d
+wui <-- wa : displayStatus
+deactivate wa
 a <- wui : logout()
+deactivate wui
 
 @enduml
