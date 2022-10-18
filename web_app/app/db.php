@@ -65,5 +65,48 @@ function makeUserReport($userEmail, $elevatorId, $comment) {
     $statement1->bindParam(":elevatorId", $elevatorId);
 
     $statement2 = $dbh->prepare("INSERT INTO DownReports (email, isVerified) VALUES (:email, 0)");
+
+    $statement1->execute();
+
+    $dbh = null;
 }
+
+function getReports($elevatorId) {
+    $dbh = connectDB();
+
+    $statement1 = $dbh->prepare("SELECT * FROM DownReports WHERE ElevatorId = :eId");
+    $statement1->bindParam(":eId", $elevatorId);
+    $statement1->execute();
+
+    $statement1->fetch();
+
+    i = 0;
+    while ($row = $statement1->fetch()) {
+        $arr[i] = $row;
+        i++;
+    }
+
+    $dbh = null;
+
+    return $arr;
+}
+
+function getReportNumber() {
+    $dbh = connectDB();
+
+    $statement1 = $dbh->prepare("SELECT (id, downReports) FROM ElevatorInfo;");
+
+    $statement1->execute();
+
+    i = 0;
+    while ($row = $statement1->fetch()) {
+        $arr[i] = $row;
+        i++;
+    }
+
+    $dbh = null;
+
+    return $arr;
+}
+
 ?>

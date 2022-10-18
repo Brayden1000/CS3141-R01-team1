@@ -9,6 +9,13 @@ if ( isset($_POST["test"]) ) {
     echo "\n";
     addUser($_POST["email"]);
 }
+
+// Request to get Elevator Reports
+$elevatorReportCounts = getReportNumber();
+foreach ($elevatorReportCounts as $elevator) {
+    echo "Elevator " + $elevator['id'] + "Down Count: " + $elevator['downReports'];
+}
+
 ?>
     
 <!DOCTYPE html>
@@ -20,6 +27,16 @@ if ( isset($_POST["test"]) ) {
 
     <body>
 
+    <?php
+
+
+
+
+    ?>
+
+
+
+
         <h1>Elevator Down</h1>
         <br>
         <h3>Website in Testing Phase</h3>
@@ -30,6 +47,8 @@ if ( isset($_POST["test"]) ) {
             <br>
             <input type="submit" name="test" value="Login">
         </form>
+
+
     
     </body>
 </html>
