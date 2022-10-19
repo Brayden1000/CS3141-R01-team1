@@ -4,7 +4,6 @@ function connectDB() {
         $config = parse_ini_file("db.ini");
         $dbh = new PDO($config['dsn'], $config['username'], $config['password']);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo "Connected Successfully";
         return $dbh;
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
@@ -64,7 +63,10 @@ function makeUserReport($userEmail, $elevatorId, $comment) {
     $statement1 = $dbh->prepare("UPDATE ElevatorInfo SET downReports += 1  WHERE elevatorId = :elevatorId;");
     $statement1->bindParam(":elevatorId", $elevatorId);
 
-    $statement2 = $dbh->prepare("INSERT INTO DownReports (email, isVerified) VALUES (:email, 0)");
+    $statement2 = $dbh->prepare("INSERT INTO DownReports (reporter, comment, elevatorId) VALUES (:email, :comment, :eId);");
+    $statement2 = $dbh->bindParam(":email", $userEmail);
+    $statement2 = $dbh->bindParam(":comment", $comment);
+    $statement2 = $dbh->bindParam(":eId", $elevatorId);
 
     $statement1->execute();
 
@@ -74,16 +76,15 @@ function makeUserReport($userEmail, $elevatorId, $comment) {
 function getReports($elevatorId) {
     $dbh = connectDB();
 
-    $statement1 = $dbh->prepare("SELECT * FROM DownReports WHERE ElevatorId = :eId");
+    $statement1 = $dbh->prepare("SELECT * FROM DownReports WHERE elevatorId = :eId;");
     $statement1->bindParam(":eId", $elevatorId);
     $statement1->execute();
 
-    $statement1->fetch();
-
-    i = 0;
+    $i = 0;
+    $arr = [];
     while ($row = $statement1->fetch()) {
-        $arr[i] = $row;
-        i++;
+        $arr[$i] = $row;
+        $i++;
     }
 
     $dbh = null;
@@ -94,14 +95,14 @@ function getReports($elevatorId) {
 function getReportNumber() {
     $dbh = connectDB();
 
-    $statement1 = $dbh->prepare("SELECT (id, downReports) FROM ElevatorInfo;");
+    $statement1 = $dbh->prepare("SELECT id, downReports, location FROM ElevatorInfo;");
 
     $statement1->execute();
 
-    i = 0;
+    $i = 0;
     while ($row = $statement1->fetch()) {
-        $arr[i] = $row;
-        i++;
+        $arr[$i] = $row;
+        $i++;
     }
 
     $dbh = null;
