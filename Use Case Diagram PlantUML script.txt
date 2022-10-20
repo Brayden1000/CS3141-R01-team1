@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+actor "User" as us
+actor "Admin" as ad
+rectangle Elevator_Down {
+  usecase "Login" as UC1
+  usecase "Open Mobile App" as UC2
+  usecase "Scan QR Code" as UC3
+  usecase "Send Down Report" as UC4
+  usecase "Check Elevator Status" as UC5
+  usecase "View Map Of Elevators" as UC6
+  usecase "View List of Elevators" as UC7
+  usecase "Label Elevator as Down" as UC8
+  usecase "Clear Down Reports/Label" as UC9
+  usecase "Open Web App" as UC10
+}
+
+us ---- UC2
+us --- UC3
+us --- UC10
+ad ---- UC2
+ad ---- UC3
+ad --- UC10
+
+UC10 ...> UC1 : <<extends>>
+UC2 ...> UC1 : <<extends>>
+UC3 .> UC2 : <<includes>>
+UC1 <. UC3 : <<extends>>
+UC4 <.. UC1 : <<includes>>
+UC5 <.. UC1 : <<includes>>
+UC6 ..> UC5 : <<extends>>
+UC7 ..> UC5 : <<extends>>
+UC8 <.. UC1 : <<includes>>
+UC9 <.. UC1 : <<includes>>
+
+note right of (UC8)
+  Admin Privileges
+        Required
+end note
+
+note left of (UC3)
+  Only Accessible
+            Via
+  Phone's Camera
+end note
+
+note right of (UC9)
+  Admin Privileges
+        Required
+end note
+@enduml
