@@ -1,0 +1,32 @@
+@startuml
+class DownReports {
+{field} + id: int(11)
+{field} + email: varchar(255)
+{field} + comment: tinytext
+{field} + elevatorId: int(11)
+
+{method} PRIMARY KEY: id
+{method} FOREIGN KEY: (elevatorId) refs ElevatorInfo(id)
+}
+
+class UserData {
+{field} + email: varchar(255)
+{field} + isAdmin: tinyint(1)
+
+{method} PRIMARY KEY: email
+}
+
+class ElevatorInfo {
+{field} + id: int(11)
+{field} + location: varchar(255)
+{field} + downReports: int(11)
+{field} + isDownVerified: tinyint(1)
+{field} + timeVerified: timestamp
+{field} + whoVerified: varchar(255)
+
+{method} PRIMARY KEY: id
+}
+
+DownReports -[hidden]> UserData
+DownReports --> ElevatorInfo
+@enduml
