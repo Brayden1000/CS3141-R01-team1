@@ -36,16 +36,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-
-        Button test = (Button) findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent switchActivityIntent = new Intent(MainActivity.this, Login.class);
-                                        startActivity(switchActivityIntent);
-                                    }
-                                }
-        );
     }
 
 }
