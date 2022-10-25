@@ -13,7 +13,41 @@ if ( isset($_POST["test"]) ) {
 <!DOCTYPE html>
 <html>
     <head>
+        
+        <!--
+         - Some scripts that let this actually work, the first is Google's API
+         - and the second is what let's me validate the credentials on our end
+         - instead of trying to find a way to get Google's validation API to work
+        -->
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <script language="JavaScript" type="text/javascript"
+                src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js">
+        </script>
+        
+        <!--
+         - Defines the behavior of the sign-in button, providing the OAuth clientID,
+         - telling it to not auto-prompt, and to call the given function with the credential
+        -->
+        <div id="g_id_onload"
+            data-client_id="988976111145-c59o1r1o7cln4v1djb8bkgtcmvp5k66j.apps.googleusercontent.com"
+            data-auto_prompt="false" data-callback="handleCredentialResponse">
+        </div>
+        
+        <!--
+         - This div is what actual renders the login button, feel free to move
+         - it when working on the UI
+        -->
+        <div class="g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="sign_in_with"
+            data-shape="rectangular"
+            data-logo_alignment="left">
+        </div>
+        
         <title>Elevator Down</title>
+        
     </head>
 
     <body>
@@ -42,6 +76,56 @@ foreach ($elevatorReportCounts as $elevator) {
 }
 ?>
     <br><br>
-    <a href="./login.php">Login</a>
+    
+    <!--
+     - Form that let's me send the user information in POST
+     - I'm sending it to login.php so I can handle all the rest of the login
+     - there instead of cluttering this one even more.
+     -
+     - I'm also putting all this in the bottom on purpose, but if you want to
+     - move it feel free
+    -->
+    <form id="send_payload" action="https://mtuelevatordown.000webhostapp.com/login.php" 
+              method="post">
+        <input type="hidden" id="id" name="id" value="default"></input>
+        <input type="hidden" id="name" name="name" value="default"></input>
+        <input type="hidden" id="email" name="email" value="default"></input>
+    </form>
+    
+    <!--
+     - Below is all the javascript that get's the credntial, decrypts it, formats
+     - it into the above form, and then submits it.
+    -->
+    <script>
+        
+        // Get's the response from Google's sign-in API, calls another function
+        // to decode it, then formats the information into the form.
+        function handleCredentialResponse(response) {
+            
+            const responsePayload = decodeJwtResponse(response.credential);
+        
+            document.getElementById("id").setAttribute("value", responsePayload.sub);
+            document.getElementById("name").setAttribute("value", responsePayload.name);
+            document.getElementById("email").setAttribute("value", responsePayload.email);
+            document.getElementById("send_payload").submit();
+        
+        }
+        
+        // Don't even ask about this one, I have no clue, it was just copy pasted
+        // from where Google told me to look to validate manually
+        function decodeJwtResponse(credential) {
+            
+            var isValid = KJUR.jws.JWS.verifyJWT(credential, "616161", {alg: ['HS256']});
+                
+            var sJWT = credential;
+            var headerObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(sJWT.split(".")[0]));
+            var payloadObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(sJWT.split(".")[1]));
+                
+            return payloadObj;
+            
+        }
+        
+    </script>
+    
     </body>
 </html>
