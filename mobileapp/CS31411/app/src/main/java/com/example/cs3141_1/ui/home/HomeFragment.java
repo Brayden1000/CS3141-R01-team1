@@ -20,8 +20,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 
 public class HomeFragment extends Fragment {
 
@@ -29,7 +31,8 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
-    Button test;
+    SignInButton signin;
+    Snackbar mySnackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +53,16 @@ public class HomeFragment extends Fragment {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
 
         //Button
-        test = (Button) root.findViewById(R.id.test);
+        signin = (SignInButton) root.findViewById(R.id.sign_in_button);
+
+        if(account != null){
+            signin.setVisibility(View.INVISIBLE);
+        }
+        else {
+            signin.setVisibility(View.VISIBLE);
+        }
+
+        //mySnackbar = Snackbar.make(root.findViewById(android.R.id.content), "test", Snackbar.LENGTH_SHORT);
 
         ConfignewButton();
 
@@ -62,12 +74,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void ConfignewButton(){
-        test.setOnClickListener(new View.OnClickListener() {
+        signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.test:
+                    case R.id.sign_in_button:
                         signIn();
+
                         break;
                     // ...
                 }
@@ -99,6 +112,8 @@ public class HomeFragment extends Fragment {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Log.w("Email", account.getEmail());
+            signin.setVisibility(View.INVISIBLE);
+            //mySnackbar.show();
             // Signed in successfully, show authenticated UI.
            // Intent switchActivityIntent = new Intent(this, MainActivity.class);
             //startActivity(switchActivityIntent);
