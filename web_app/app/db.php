@@ -26,6 +26,19 @@ function isUserInDB($email) {
     return $i;
 }
 
+function isUserAdmin($email) {
+    $dbh = connectDB();
+    
+    $statement = $dbh->prepare("SELECT isAdmin FROM UserData WHERE email = :email");
+    $statement->bindParam(":email", $email);
+    $statement->execute();
+    
+    $isAdmin = $statement->fetch()[0];
+    
+    $dbh = null;
+    return $isAdmin;
+}
+
 function addUser($email) {
     $dbh = connectDB();
 
