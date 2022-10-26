@@ -10,11 +10,27 @@ function connectDB() {
     }
 }
 
+function isUserInDB($email) {
+    $dbh = connectDB();
+    
+    $statement = $dbh->prepare("SELECT * FROM UserData WHERE email = :email");
+    $statement->bindParam(":email", $email);
+    $statement->execute();
+    
+    $i = 0;
+    while ($row = $statement->fetch()) {
+        $i++;
+    }
+    
+    $dbh = null;
+    return $i;
+}
+
 function addUser($email) {
     $dbh = connectDB();
 
     if (checkUser($email)) {
-        $statement1 = $dbh->prepare("INSERT INTO UserData (email, isVerified) VALUES (:email, 0)");
+        $statement1 = $dbh->prepare("INSERT INTO UserData (email, isAdmin) VALUES (:email, 0)");
         $statement1->bindParam(":email", $email);
         $statement1->execute();
     } else {
@@ -45,7 +61,6 @@ function verifyUser($email) {
 function verifyElevator($elevatorId) {
     $dbh = connectDB();
 
-    // Set the elevator as verified in the database
     $statement1 = $dbh->prepare("UPDATE ElevatorInfo
                                  SET isDownVerified = 1, timeSinceVerified = :timeSince, whoVerified = :email
                                 WHERE elevatorId = :elevatorId;");
@@ -53,24 +68,13 @@ function verifyElevator($elevatorId) {
     $statement1->bindParam(":email", $email);
     $statement1->bindParam(":timeSince", time());
 
-    // Reset elevator report number
-    $statement2 = $dbh->prepare("UPDATE ElevatorInfo
-                                SET downReports = 0
-                                WHERE elevatorId = :elevatorId;");
-    $statement2->bindParam(":elevatorId", $elevatorId);
-
     $statement1->execute();
-    $statement2->execute();
-
 
     $dbh = null;
 }
 
 function makeUserReport($userEmail, $elevatorId, $comment) {
     $dbh = connectDB();
-
-    $verification_statment = 1;
-
 
     $statement1 = $dbh->prepare("UPDATE ElevatorInfo SET downReports += 1  WHERE elevatorId = :elevatorId;");
     $statement1->bindParam(":elevatorId", $elevatorId);

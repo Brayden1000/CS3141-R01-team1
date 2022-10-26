@@ -8,6 +8,9 @@ if ( isset($_POST["test"]) ) {
     addUser($_POST["email"]);
 }
 
+//debugging stuff
+print_r($_SESSION);
+
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +48,20 @@ if ( isset($_POST["test"]) ) {
             data-shape="rectangular"
             data-logo_alignment="left">
         </div>
+        
+        <?php
+        
+            if (isset($_SESSION["invalid"])) {
+                
+                echo "<p>";
+                echo "Your email is not from the domain \"mtu.edu.\"<br>";
+                echo "You may view elevator status, but please sign-in with a ";
+                echo "valid email to make reports.";
+                echo "</p>";
+                
+            }
+        
+        ?>
         
         <title>Elevator Down</title>
         
