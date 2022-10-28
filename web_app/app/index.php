@@ -16,7 +16,7 @@ print_r($_SESSION);
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <link rel="stylesheet" href="style.css">
         <!--
          - Some scripts that let this actually work, the first is Google's API
          - and the second is what let's me validate the credentials on our end
@@ -36,18 +36,7 @@ print_r($_SESSION);
             data-auto_prompt="false" data-callback="handleCredentialResponse">
         </div>
         
-        <!--
-         - This div is what actual renders the login button, feel free to move
-         - it when working on the UI
-        -->
-        <div class="g_id_signin"
-            data-type="standard"
-            data-size="large"
-            data-theme="outline"
-            data-text="sign_in_with"
-            data-shape="rectangular"
-            data-logo_alignment="left">
-        </div>
+
         
         <?php
         
@@ -68,7 +57,25 @@ print_r($_SESSION);
     </head>
 
     <body>
-        <h1>Elevator Down</h1>
+        <div class="topnav">
+            <a class="active" href="#listView">List View</a>
+            <a href="#mapView">Map View</a>
+        </div>
+
+        <h1>        
+            <!--
+            - This div is what actual renders the login button, feel free to move
+            - it when working on the UI
+            -->
+            <div class="g_id_signin"
+                data-type="standard"
+                data-size="large"
+                data-theme="outline"
+                data-text="sign_in_with"
+                data-shape="rectangular"
+                data-logo_alignment="left">
+            </div>
+        </h1>
         <br>
         <h3>Website in Testing Phase</h3>
     

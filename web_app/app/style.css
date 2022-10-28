@@ -1,0 +1,53 @@
+/*
+Fonts
+Primary Web Font
+Open Sans - Our sans-serif typeface, primary web font used for body copy and headings.
+
+Hex Colors
+Gold #ffcd00
+Grey #8a8b8c
+*/
+
+/* for the menu bar */
+.topnav {
+    background-color: #000000;
+    padding: 16pt 4pt;
+    
+} /* syles the button */
+.topnav a {
+    color:#000000;
+    background-color: #ffcd00;
+    border: 2px solid #000000;
+    text-align: center;
+    padding: 12pt;   
+} 
+.topnav a:hover {
+    background-color:#ffffff;
+    color: #000000;
+}
+
+
+/* for report elevator down button */
+#submit {
+    color:#000000;
+    background-color: #ffcd00;
+    border: 2px solid #000000;
+    text-align: center;
+    padding: 12pt;
+}
+#submit:hover{
+    background-color:#ffffff;
+    color: #000000;
+}
+
+/* currently where the google login button is */
+h1 {
+    background-color: #000000;
+    padding: 20pt;
+    text-align: right;
+}
+
+h3 {
+    padding-left: 30pt;
+    padding-right: 30pt;
+}
