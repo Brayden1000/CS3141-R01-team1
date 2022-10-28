@@ -32,7 +32,6 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     SignInButton signin;
-    Snackbar mySnackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,12 +56,12 @@ public class HomeFragment extends Fragment {
 
         if(account != null){
             signin.setVisibility(View.INVISIBLE);
+            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                    "Logged in as: " + account.getEmail(), Snackbar.LENGTH_SHORT).show();
         }
         else {
             signin.setVisibility(View.VISIBLE);
         }
-
-        //mySnackbar = Snackbar.make(root.findViewById(android.R.id.content), "test", Snackbar.LENGTH_SHORT);
 
         ConfignewButton();
 
@@ -113,6 +112,8 @@ public class HomeFragment extends Fragment {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Log.w("Email", account.getEmail());
             signin.setVisibility(View.INVISIBLE);
+            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                    "Successfully logged in", Snackbar.LENGTH_SHORT).show();
             //mySnackbar.show();
             // Signed in successfully, show authenticated UI.
            // Intent switchActivityIntent = new Intent(this, MainActivity.class);
