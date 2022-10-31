@@ -48,6 +48,8 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     SignInButton signin;
+    Button post;
+    Button request;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -70,70 +72,83 @@ public class HomeFragment extends Fragment {
         //Button
         signin = (SignInButton) root.findViewById(R.id.sign_in_button);
 
+        post = (Button) root.findViewById(R.id.post);
+        request = (Button) root.findViewById(R.id.request);
+
         if(account != null){
             signin.setVisibility(View.INVISIBLE);
 
-            String urlString = "https://mtuelevatordown.000webhostapp.com/test.php"; // URL to call
-            String data = "test"; //data to post
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                    response.trim(), Snackbar.LENGTH_SHORT).show();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                    error.toString(), Snackbar.LENGTH_SHORT).show();
-                        }
-                    } ) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("data", data);
-
-                    return params;
-                }
-            };
-
-            RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
-            requestQueue.add(stringRequest);
-
-
-            /*OutputStream out = null;
-
-            try {
-                URL url = new URL(urlString);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                out = new BufferedOutputStream(urlConnection.getOutputStream());
-
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Key","Value");
-                urlConnection.setDoOutput(true);
-
-
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
-                writer.write(data);
-                writer.flush();
-                writer.close();
-                out.close();
-
-                urlConnection.connect();
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }*/
         }
         else {
             signin.setVisibility(View.VISIBLE);
         }
 
-        ConfignewButton();
+        String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php"; // URL to call
+        String data = "test"; //data to post
+
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        "success", Snackbar.LENGTH_SHORT).show();
+                                Log.w("success", response.trim());
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        error.toString(), Snackbar.LENGTH_SHORT).show();
+                                Log.w("error",  error.toString());
+                            }
+                        }) {
+
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("data", data);
+
+                        return params;
+                    }
+                };
+
+                RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+                requestQueue.add(stringRequest);
+            }
+        });
+
+        request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        "success", Snackbar.LENGTH_SHORT).show();
+                                Log.w("success", response.trim());
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        error.toString(), Snackbar.LENGTH_SHORT).show();
+                                Log.w("error",  error.toString());
+                            }
+                        });
+
+                RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+                requestQueue.add(stringRequest);
+            }
+        });
+
+        ConfignewButton1();
 
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
@@ -142,7 +157,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void ConfignewButton(){
+    private void ConfignewButton1(){
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
