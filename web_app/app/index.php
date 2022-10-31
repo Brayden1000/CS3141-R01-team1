@@ -59,13 +59,15 @@ if ( isset($_POST["test"]) ) {
 
     <body>
         <div class="topnav">
+            <img src="Gold_text_black_background.png" class="mtuimage" alt="MTU Logo">
             <a class="active" href="#listView">List View</a>
             <a href="#mapView">Map View</a>
+
             <!--
             - This div is what actual renders the login button, feel free to move
             - it when working on the UI
             -->
-            <div class="g_id_signin google-button"
+            <div class="g_id_signin google_button"
                 data-type="standard"
                 data-size="large"
                 data-theme="outline"
