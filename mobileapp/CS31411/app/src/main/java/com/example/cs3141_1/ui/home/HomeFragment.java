@@ -13,6 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.cs3141_1.MainActivity;
 import com.example.cs3141_1.R;
 import com.example.cs3141_1.databinding.FragmentHomeBinding;
@@ -24,6 +30,16 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
@@ -56,8 +72,62 @@ public class HomeFragment extends Fragment {
 
         if(account != null){
             signin.setVisibility(View.INVISIBLE);
-            Snackbar.make(getActivity().findViewById(android.R.id.content),
-                    "Logged in as: " + account.getEmail(), Snackbar.LENGTH_SHORT).show();
+
+            String urlString = "https://mtuelevatordown.000webhostapp.com/test.php"; // URL to call
+            String data = "test"; //data to post
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    response.trim(), Snackbar.LENGTH_SHORT).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    error.toString(), Snackbar.LENGTH_SHORT).show();
+                        }
+                    } ) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("data", data);
+
+                    return params;
+                }
+            };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
+            requestQueue.add(stringRequest);
+
+
+            /*OutputStream out = null;
+
+            try {
+                URL url = new URL(urlString);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                out = new BufferedOutputStream(urlConnection.getOutputStream());
+
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Key","Value");
+                urlConnection.setDoOutput(true);
+
+
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                writer.write(data);
+                writer.flush();
+                writer.close();
+                out.close();
+
+                urlConnection.connect();
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }*/
         }
         else {
             signin.setVisibility(View.VISIBLE);
@@ -114,6 +184,9 @@ public class HomeFragment extends Fragment {
             signin.setVisibility(View.INVISIBLE);
             Snackbar.make(getActivity().findViewById(android.R.id.content),
                     "Successfully logged in", Snackbar.LENGTH_SHORT).show();
+
+
+
             //mySnackbar.show();
             // Signed in successfully, show authenticated UI.
            // Intent switchActivityIntent = new Intent(this, MainActivity.class);

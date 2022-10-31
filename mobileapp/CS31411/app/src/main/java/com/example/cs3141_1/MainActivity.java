@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         //opendb();
+
     }
 
    /* private void opendb(){
