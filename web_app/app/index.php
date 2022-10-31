@@ -8,8 +8,9 @@ if ( isset($_POST["test"]) ) {
     addUser($_POST["email"]);
 }
 
-//debugging stuff
-print_r($_SESSION);
+/* debugging stuff*/
+// print_r($_SESSION);
+
 
 ?>
 
@@ -57,17 +58,14 @@ print_r($_SESSION);
     </head>
 
     <body>
-        <div class="topnav">
+        <div class="topnav topnav-right">
             <a class="active" href="#listView">List View</a>
             <a href="#mapView">Map View</a>
-        </div>
-
-        <h1>        
             <!--
             - This div is what actual renders the login button, feel free to move
             - it when working on the UI
             -->
-            <div class="g_id_signin"
+            <div class="g_id_signin google-button"
                 data-type="standard"
                 data-size="large"
                 data-theme="outline"
@@ -75,6 +73,10 @@ print_r($_SESSION);
                 data-shape="rectangular"
                 data-logo_alignment="left">
             </div>
+        </div>
+
+        <h1>        
+            
         </h1>
         <br>
         <h3>Website in Testing Phase</h3>
@@ -90,7 +92,7 @@ foreach ($elevatorReportCounts as $elevator) {
     ?>
     <form action="report.php" method="post">
         <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
-        <input type="submit" name="Report" value="Report Elevator">
+        <input type="submit" class = "report_button" name="Report" value="Report Elevator">
     </form>
     <?php
     foreach ($elevatorReports as $report) {
