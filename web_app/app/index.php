@@ -58,7 +58,7 @@ if ( isset($_POST["test"]) ) {
     </head>
 
     <body>
-        <div class="topnav topnav-right">
+        <div class="topnav">
             <a class="active" href="#listView">List View</a>
             <a href="#mapView">Map View</a>
             <!--
