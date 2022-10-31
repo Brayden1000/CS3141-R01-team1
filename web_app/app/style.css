@@ -12,21 +12,24 @@ Grey #8a8b8c
 .topnav {
     background-color: #000000;
     padding: 16pt 4pt;
-    position:fixed;
+    /*margin-right: 20pt;*/
     overflow: hidden;
+    width: 100%;
+    text-align: center;
 } /* syles the button */
 .topnav a {
     color:#000000;
     background-color: #ffcd00;
     border: 2px solid #000000;
     text-align: center;
-    padding: 12pt;   
+    padding: 12pt;
 } 
 .topnav a:hover {
     background-color:#ffffff;
     color: #000000;
 }
 
+<<<<<<< HEAD
 /* for the MTU image in the topnav bar */
 .mtuimage {
     max-width: 200px;
@@ -41,6 +44,8 @@ Grey #8a8b8c
     margin-bottom: auto;
 }
 
+=======
+>>>>>>> 818f0adfc06c90c28250caad7524b2c0a80b777a
 /* for report elevator down button */
 .report_button {
     color:#000000;
@@ -53,3 +58,31 @@ Grey #8a8b8c
     background-color:#ffffff;
     color: #000000;
 }
+<<<<<<< HEAD
+=======
+
+.google-button {
+    width: 200px;
+    text-align: right;
+    float: right;
+    margin-right: 25px;
+}
+
+.main_div {
+    float: bottom;
+}
+
+
+
+/* currently where the google login button is
+h1 {
+    background-color: #000000;
+    padding: 20pt;
+    text-align: right; 
+}
+
+h3 {
+    padding-left: 30pt;
+    padding-right: 30pt;
+} */
+>>>>>>> 818f0adfc06c90c28250caad7524b2c0a80b777a
