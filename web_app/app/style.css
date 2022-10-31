@@ -13,6 +13,7 @@ Grey #8a8b8c
     background-color: #000000;
     padding: 16pt 4pt;
     position:fixed;
+    overflow: hidden;
 } /* syles the button */
 .topnav a {
     color:#000000;
@@ -24,9 +25,6 @@ Grey #8a8b8c
 .topnav a:hover {
     background-color:#ffffff;
     color: #000000;
-}
-.topnav-right {
-    float: right;
 }
 
 
@@ -46,6 +44,7 @@ Grey #8a8b8c
 .google-button {
     width: 200px;
     text-align: right;
+    float: right;
 }
 
 
