@@ -12,21 +12,22 @@ Grey #8a8b8c
 .topnav {
     background-color: #000000;
     padding: 16pt 4pt;
-    position:fixed;
+    /*margin-right: 20pt;*/
     overflow: hidden;
+    width: 100%;
+    text-align: center;
 } /* syles the button */
 .topnav a {
     color:#000000;
     background-color: #ffcd00;
     border: 2px solid #000000;
     text-align: center;
-    padding: 12pt;   
+    padding: 12pt;
 } 
 .topnav a:hover {
     background-color:#ffffff;
     color: #000000;
 }
-
 
 /* for report elevator down button */
 .report_button {
@@ -45,6 +46,11 @@ Grey #8a8b8c
     width: 200px;
     text-align: right;
     float: right;
+    margin-right: 25px;
+}
+
+.main_div {
+    float: bottom;
 }
 
 

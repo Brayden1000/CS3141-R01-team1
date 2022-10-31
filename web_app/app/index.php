@@ -79,28 +79,30 @@ if ( isset($_POST["test"]) ) {
             
         </h1>
         <br>
-        <h3>Website in Testing Phase</h3>
+        <div class="main_div">
+            <h3>Website in Testing Phase</h3>
     
 
-<?php
+            <?php
 
-// Request to get Elevator Reports
-$elevatorReportCounts = getReportNumber();
-foreach ($elevatorReportCounts as $elevator) {
-    echo '<h3>Elevator ' . $elevator['id'] . ' at ' . $elevator['location']  . ' has ' . $elevator['downReports'] . ' reports.</h3>';
-    $elevatorReports = getReports($elevator['id']);
-    ?>
-    <form action="report.php" method="post">
-        <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
-        <input type="submit" class = "report_button" name="Report" value="Report Elevator">
-    </form>
-    <?php
-    foreach ($elevatorReports as $report) {
-        echo "  <p>Report " . $report['id'] . " (" . $report['reporter'] . "): " . $report['comment']  . "</p>";
-    }
-    
-}
-?>
+            // Request to get Elevator Reports
+            $elevatorReportCounts = getReportNumber();
+            foreach ($elevatorReportCounts as $elevator) {
+                echo '<h3>Elevator ' . $elevator['id'] . ' at ' . $elevator['location']  . ' has ' . $elevator['downReports'] . ' reports.</h3>';
+                $elevatorReports = getReports($elevator['id']);
+                ?>
+                <form action="report.php" method="post">
+                    <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
+                    <input type="submit" class = "report_button" name="Report" value="Report Elevator">
+                </form>
+                <?php
+                foreach ($elevatorReports as $report) {
+                    echo "  <p>Report " . $report['id'] . " (" . $report['reporter'] . "): " . $report['comment']  . "</p>";
+                }
+                
+            }
+            ?>
+        </div>
     <br><br>
     
     <!--
