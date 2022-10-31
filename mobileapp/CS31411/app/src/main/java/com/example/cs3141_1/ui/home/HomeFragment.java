@@ -83,10 +83,11 @@ public class HomeFragment extends Fragment {
             signin.setVisibility(View.VISIBLE);
         }
 
-        String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php"; // URL to call
+       // URL to call
         String data = "test"; //data to post
 
         post.setOnClickListener(new View.OnClickListener() {
+            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php";
             @Override
             public void onClick(View view) {
 
@@ -96,7 +97,7 @@ public class HomeFragment extends Fragment {
                             public void onResponse(String response) {
                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                                         "success", Snackbar.LENGTH_SHORT).show();
-                                Log.w("success", response.trim());
+                                Log.w("success", response);
                             }
                         },
                         new Response.ErrorListener() {
@@ -123,6 +124,7 @@ public class HomeFragment extends Fragment {
         });
 
         request.setOnClickListener(new View.OnClickListener() {
+            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?fisher=abc";
             @Override
             public void onClick(View view) {
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
@@ -132,6 +134,7 @@ public class HomeFragment extends Fragment {
                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                                         "success", Snackbar.LENGTH_SHORT).show();
                                 Log.w("success", response.trim());
+                                int t = Integer.parseInt(response.trim());
                             }
                         },
                         new Response.ErrorListener() {
