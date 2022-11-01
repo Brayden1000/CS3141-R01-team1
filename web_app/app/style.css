@@ -8,39 +8,47 @@ Gold #ffcd00
 Grey #8a8b8c
 */
 
-/* for the menu bar */
+/* the main navigation bar */
 .topnav {
+    box-sizing: border-box;
     background-color: #000000;
-    padding: 16pt 4pt;
-    /*margin-right: 20pt;*/
-    overflow: hidden;
     width: 100%;
-    text-align: center;
-} /* syles the button */
+
+    /* text-align: center; */
+} 
+
+/* for the MTU image in the topnav bar */
+.mtuimage {
+    /* the 4px difference makes up for extra space on the bottom of the image */
+    padding: 20px 20px 16px 20px;
+    max-width: 200px;
+    overflow: hidden;
+}
+
+/* map view and list view buttons */
 .topnav a {
     color:#000000;
     background-color: #ffcd00;
     border: 2px solid #000000;
-    text-align: center;
-    padding: 12pt;
+    padding: 12px;
+
+    /* align-items: center; */
+    /* position:relative; */
+    /* text-align: center; */
 } 
 .topnav a:hover {
     background-color:#ffffff;
-    color: #000000;
-}
-
-/* for the MTU image in the topnav bar */
-.mtuimage {
-    max-width: 200px;
 }
 
 /* for the google button in the topnav bar */
 .google_button {
-    width: 200px;
-    text-align: right;
+    max-width: 200px;
+    padding: 20px;
     float: right;
-    margin-top: auto;
-    margin-bottom: auto;
+    
+    /* text-align: right; */
+    /* margin-top: auto;
+    margin-bottom: auto; */
 }
 
 /* for report elevator down button */
@@ -49,7 +57,7 @@ Grey #8a8b8c
     background-color: #ffcd00;
     border: 2px solid #000000;
     text-align: center;
-    padding: 12pt;
+    padding: 6px;
 }
 .report_button:hover{
     background-color:#ffffff;
@@ -59,4 +67,3 @@ Grey #8a8b8c
 .main_div {
     float: bottom;
 }
-
