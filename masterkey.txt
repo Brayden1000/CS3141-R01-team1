@@ -1,1 +1,45 @@
-Name:   Key:  Value:
+This describes what to include in the mobileAPI GET header to call certain functions and also what to expect in terms of return values.
+At the time of typing out all these, I haven't implemented them, so if they aren't working that's likely why. Also feel free to let me know if I missed anything.
+~Nat
+
+Name: Login   
+  Key: login  
+  Value: what ever the email is for the user logging in
+  Return: 1 if successful; 0 if not
+  Example: mobileAPI.php?login=nathanan@mtu.edu
+  
+Name: Get Elevator Info
+  Key: info
+  Value: elevator name (format for elevator id's still in progress), or "all" to get all elevators
+  Return: List of elevators and info requested. Will be echoed in the order of ID, # of reports, then location, repeating that for all elevators if "all"
+  Example: mobileAPI.php?info=all
+  
+Name: Is User Admin
+  Key: admin
+  Value: email of user
+  Return: 1 if user is an admin, 0 if not.
+  Example: mobileAPI.php?admin=fakeadmin@mtu.edu
+  
+Name: Make User Report
+  Key: report
+  Value: anything
+  Params: user email, elevator id, and comment
+  Note: the end of the URL will look like mobileAPI.php?report=1&email={}&elevatorID={}&comment={}
+  Note: comment can be left blank, removing the "&comment={}" part; also the {}'s indicate that's where you put the value for each respective parameter
+  Return: 1 if successful; 0 if not
+  Example: mobileAPI.php?report=1&email=nathanan@mtu.edu&elevatorID=2&comment=Cannot%20be%20called%20from%20second%20floor
+  Note: the %20's are indicitive of spaces, just formatting a normal string into the url should work fine when programming
+  
+Name: Verify Elevator Down
+  Key: verify
+  Value: anything
+  Params: elevator id, admin's email
+  Return: 1 if successful; 0 if not
+  Example: mobileAPI.php?verify=1&elevatorID=2&email=fakeadmin@mtu.edu
+  
+Name: Get Reports
+  Key: viewReports
+  Value: elevatorID
+  Return: First, the number of reports, followed by that many repetitions of elevator ID, report ID, reporter email, and comment, in that order
+  Example: mobileAPI.php?viewReports=2
+  
