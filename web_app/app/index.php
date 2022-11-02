@@ -4,7 +4,7 @@ session_start(); //Starts session to store cookies and stuff
 
 
 // Set login session vars to zero by default and if logging out
-if (!$_SESSION['logged_in'] || isset($_POST['log_out'])) {
+if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
     $_SESSION['logged_in'] = 0;
     $_SESSION['is_admin'] = 0;
     $_SESSION['id'] = 0;
@@ -39,21 +39,8 @@ if (!$_SESSION['logged_in'] || isset($_POST['log_out'])) {
         -->
     <div id="g_id_onload" data-client_id="988976111145-c59o1r1o7cln4v1djb8bkgtcmvp5k66j.apps.googleusercontent.com" data-auto_prompt="false" data-callback="handleCredentialResponse">
     </div>
-
-
-
-    <?php
-
-    if (isset($_SESSION["invalid"])) {
-
-        echo "<p>";
-        echo "Your email is not from the domain \"mtu.edu.\"<br>";
-        echo "You may view elevator status, but please sign-in with a ";
-        echo "valid email to make reports.";
-        echo "</p>";
-    }
-
-    ?>
+    
+    
 
     <title>Elevator Down</title>
 
@@ -93,6 +80,21 @@ if (!$_SESSION['logged_in'] || isset($_POST['log_out'])) {
     <br>
     <div class="main_div">
         <h3>Website in Testing Phase</h3>
+        
+        <p id='invalid'>
+        Your email is not from the doman "mtu.edu"<br>
+        You may view elevator status, but please sign-in with a valid email
+        to make reports.
+        </p>
+        <script>
+            var invalid = <?php echo isset($_SESSION['invalid'])?1:0; ?>;
+            var element = document.getElementById('invalid');
+            if (1 == invalid) {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        </script>
 
         <?php
         // Request to get Elevator Reports
