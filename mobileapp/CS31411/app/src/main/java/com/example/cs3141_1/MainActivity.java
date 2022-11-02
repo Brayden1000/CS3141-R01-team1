@@ -26,6 +26,7 @@ import java.net.URLConnection;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    public static boolean ismtuemail = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
 
         //opendb();
 
+    }
+
+    public static boolean getData(){
+        return ismtuemail;
+    }
+
+    public static void setData(boolean bool){
+        ismtuemail = bool;
     }
 
    /* private void opendb(){

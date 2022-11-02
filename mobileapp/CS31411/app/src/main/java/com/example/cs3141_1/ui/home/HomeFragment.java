@@ -51,6 +51,9 @@ public class HomeFragment extends Fragment {
     Button post;
     Button request;
 
+
+    GoogleSignInAccount account;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -65,9 +68,10 @@ public class HomeFragment extends Fragment {
                 .requestEmail()
                 .build();
 
+
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
+        account = GoogleSignIn.getLastSignedInAccount(getContext());
 
         //Button
         signin = (SignInButton) root.findViewById(R.id.sign_in_button);
@@ -75,9 +79,8 @@ public class HomeFragment extends Fragment {
         post = (Button) root.findViewById(R.id.post);
         request = (Button) root.findViewById(R.id.request);
 
-        if(account != null){
+        if(account != null && MainActivity.getData() == true){
             signin.setVisibility(View.INVISIBLE);
-
         }
         else {
             signin.setVisibility(View.VISIBLE);
@@ -124,15 +127,15 @@ public class HomeFragment extends Fragment {
         });
 
         request.setOnClickListener(new View.OnClickListener() {
-            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?fisher=abc";
+            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
             @Override
             public void onClick(View view) {
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        "success", Snackbar.LENGTH_SHORT).show();
+                                //Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        //"success", Snackbar.LENGTH_SHORT).show();
                                 Log.w("success", response.trim());
                                 int t = Integer.parseInt(response.trim());
                             }
@@ -197,12 +200,22 @@ public class HomeFragment extends Fragment {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Log.w("Email", account.getEmail());
-            signin.setVisibility(View.INVISIBLE);
-            Snackbar.make(getActivity().findViewById(android.R.id.content),
-                    "Successfully logged in", Snackbar.LENGTH_SHORT).show();
-
+            String email = completedTask.getResult().getEmail().substring(completedTask.getResult().getEmail().indexOf("@")+1, completedTask.getResult().getEmail().indexOf("@")+4);
+            if(!email.equals("mtu")){
+                signin.setVisibility(View.VISIBLE);
+                Snackbar.make(getActivity().findViewById(android.R.id.content), "Please login with a mtu email", Snackbar.LENGTH_SHORT).show();
+                account = null;
+                mGoogleSignInClient.signOut();
+                MainActivity.setData(false);
+            }
+            else {
+                account = completedTask.getResult(ApiException.class);
+                MainActivity.setData(true);
+                Log.w("Email", account.getEmail());
+                signin.setVisibility(View.INVISIBLE);
+                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                        "Successfully logged in", Snackbar.LENGTH_SHORT).show();
+            }
 
 
             //mySnackbar.show();
