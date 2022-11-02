@@ -137,7 +137,7 @@ public class HomeFragment extends Fragment {
                                 //Snackbar.make(getActivity().findViewById(android.R.id.content),
                                         //"success", Snackbar.LENGTH_SHORT).show();
                                 Log.w("success", response.trim());
-                                int t = Integer.parseInt(response.trim());
+                                //int t = Integer.parseInt(response.trim());
                             }
                         },
                         new Response.ErrorListener() {

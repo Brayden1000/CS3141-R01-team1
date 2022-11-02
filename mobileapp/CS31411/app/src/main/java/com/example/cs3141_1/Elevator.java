@@ -22,4 +22,14 @@ public class Elevator {
     public String getOfficialStatus() {
         return officialStatus;
     }
+
+    public void setElevatorName(String elevatorName) {
+        this.elevatorName = elevatorName;
+    }
+    public void setNumberOfReports(int numberOfReports) {
+        this.numberOfReports = numberOfReports;
+    }
+    public void setOfficialStatus(String officialStatus) {
+        this.officialStatus = officialStatus;
+    }
 }
