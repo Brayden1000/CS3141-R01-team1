@@ -8,6 +8,12 @@ Gold #ffcd00
 Grey #8a8b8c
 */
 
+* {
+    font-family: 'Open Sans',  sans-serif;
+}
+
+/* HEADER */
+
 /* the main navigation bar */
 .topnav {
     box-sizing: border-box;
@@ -15,7 +21,7 @@ Grey #8a8b8c
     width: 100%;
 
     /* text-align: center; */
-} 
+}
 
 /* for the MTU image in the topnav bar */
 .mtuimage {
@@ -25,45 +31,99 @@ Grey #8a8b8c
     overflow: hidden;
 }
 
-/* map view and list view buttons */
-.topnav a {
-    color:#000000;
-    background-color: #ffcd00;
-    border: 2px solid #000000;
-    padding: 12px;
-
-    /* align-items: center; */
-    /* position:relative; */
-    /* text-align: center; */
-} 
-.topnav a:hover {
-    background-color:#ffffff;
-}
-
 /* for the google button in the topnav bar */
 .google_button {
     max-width: 200px;
     padding: 20px;
     float: right;
-    
+    position: relative;
+    right: 50px;
+    top: 14px;
+
     /* text-align: right; */
     /* margin-top: auto;
     margin-bottom: auto; */
 }
 
+.logout_position {
+    position: relative;
+    float: right;
+    top: 30px;
+    right: 150px;
+    width: 50px;
+}
+
+.logout_button {
+    color: #000000;
+    background-color: #ffcd00;
+    border: 2px solid #000000;
+    padding: 12px;
+    width: 100px;
+    font-weight: bold;
+    font-size: large;
+}
+
+.logout_button:hover {
+    background-color: #ffffff;
+}
+
+.nav_button {
+    position: relative;
+    float: center;
+    left: 300px;
+    bottom: 40px;
+
+    color: #000000;
+    background-color: #ffcd00;
+    border: 2px solid #000000;
+    padding: 12px;
+    margin: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: large;
+}
+
+.nav_button:hover {
+    background-color: #ffffff;
+}
+
+/* BODY */
+
+.main_div {
+    float: bottom;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #8a8b8c;
+}
+
+.full_page {
+    background-color: #8a8b8c;
+}
+
 /* for report elevator down button */
-.report_button {
-    color:#000000;
+.form_button {
+    color: #000000;
     background-color: #ffcd00;
     border: 2px solid #000000;
     text-align: center;
     padding: 6px;
 }
-.report_button:hover{
-    background-color:#ffffff;
+
+.form_button:hover {
+    background-color: #ffffff;
     color: #000000;
 }
 
-.main_div {
-    float: bottom;
+.downReport1 {
+    background-color: #cad2da;
+    margin-left: 30px;
+    padding: 1pt;
+    padding-left: 10px;
+}
+
+.downReport2 {
+    background-color: #9cb6d0;
+    margin-left: 30px;
+    padding: 1pt;
+    padding-left: 10px;
 }

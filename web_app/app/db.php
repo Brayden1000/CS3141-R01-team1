@@ -139,4 +139,16 @@ function getReportNumber() {
     return $arr;
 }
 
+function isElevatorVerified($elevatorId) {
+    $dbh = connectDB();
+
+    $statement1 = $dbh->prepare("SELECT isDownVerified FROM ElevatorInfo WHERE id = :eId;");
+    $statement1->bindParam(":eId", $elevatorId);
+    $statement1->execute();
+
+    $dbh = null;
+
+    return $statement1->fetchColumn();
+}
+
 ?>
