@@ -81,7 +81,7 @@ public class Report {
         String header = String.format("mobileAPI.php?verify=1&elevatorID=%s&email=%s",
                                        elevatorID, reporterEmail);
         if (comment != null && !comment.equals("")) {
-            header = header + String.format("&%s", comment);
+            header = header + String.format("&comment=%s", comment);
         }
         // Remove spaces from the URL, replacing them with the space identifier of %20
         header = header.replaceAll(" ", "%20");
