@@ -2,6 +2,12 @@
 require "db.php";
 session_start(); //Starts session to store cookies and stuff
 
+// This forces users to connect through the https protocol so that the google
+// sign in button works.
+if (!isset($_SERVER['HTTPS'])) {
+    header ("Location: https://mtuelevatordown.000webhostapp.com");
+    die();
+}
 
 // Set login session vars to zero by default and if logging out
 if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
