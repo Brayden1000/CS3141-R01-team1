@@ -1,5 +1,13 @@
 package com.example.cs3141_1;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
+
 /***
  * Report class
  * Simply put correct values into the constructor, and then call .send()
@@ -46,7 +54,7 @@ public class Report {
      */
     public Report(String id, String email) {
 
-        Report(Integer.parseInt(id), email);
+        this(Integer.parseInt(id), email);
 
     }
 
@@ -59,7 +67,7 @@ public class Report {
      */
     public Report(String id, String email, String comment) {
 
-        Report(Integer.parseInt(id), email, comment);
+        this(Integer.parseInt(id), email, comment);
 
     }
 
