@@ -32,6 +32,7 @@ import java.util.Scanner;
 
 public class DashboardFragment extends Fragment {
 
+
     private FragmentDashboardBinding binding;
     ListView lv;
 
@@ -40,6 +41,7 @@ public class DashboardFragment extends Fragment {
     //SearchView searchView;
     ArrayAdapter<String> adapter;
 
+    public static int downThreshold = 2;
     private void sharedResponse(String response) {
         SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         SharedPreferences.Editor editor = m.edit();
@@ -51,7 +53,7 @@ public class DashboardFragment extends Fragment {
         sc = new Scanner(response);
 
         //This (arbitrary) threshold represents the number of reports required to mark an elevator is down
-        int downThreshold = 2;
+
 
         while(sc.hasNext()){
             String elevatorName;
@@ -68,6 +70,7 @@ public class DashboardFragment extends Fragment {
             }
             elevators.add(new Elevator(id, elevatorName, Integer.parseInt(reports), status));
         }
+
 
     }
 

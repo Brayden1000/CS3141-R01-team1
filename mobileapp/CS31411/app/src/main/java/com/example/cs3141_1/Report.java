@@ -78,7 +78,7 @@ public class Report {
      */
     private String formatHeader() {
 
-        String header = String.format("mobileAPI.php?verify=1&elevatorID=%s&email=%s",
+        String header = String.format("mobileAPI.php?report=1&elevatorID=%s&email=%s",
                                        elevatorID, reporterEmail);
         if (comment != null && !comment.equals("")) {
             header = header + String.format("&comment=%s", comment);
@@ -96,6 +96,7 @@ public class Report {
     public void send(RequestQueue requestQueue) {
 
         String URL = "https://mtuelevatordown.000webhostapp.com/" + formatHeader();
+        System.out.println("THE URL IS " + URL);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
                     @Override
