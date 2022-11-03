@@ -64,8 +64,13 @@ function checkUser($email) {
 
 function verifyUser($email) {
     $dbh = connectDB();
-    $statement1 = $dbh->prepare("UPDATE UserData SET isVerified = 1 WHERE email = :email;");
+    
+    $isAdmin = isUserAdmin($email) == 1 ? 0 : 1;
+    
+    $statement1 = $dbh->prepare("UPDATE UserData SET isAdmin = :isAdmin WHERE email = :email;");
+    
     $statement1->bindParam(":email", $email);
+    $statement1->bindParam(":isAdmin", $isAdmin);
     $statement1->execute();
 
     $dbh = null;
@@ -98,6 +103,7 @@ function makeUserReport($userEmail, $elevatorId, $comment) {
     $statement2 = $dbh->bindParam(":eId", $elevatorId);
 
     $statement1->execute();
+    $statement2->execute();
 
     $dbh = null;
 }
