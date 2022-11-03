@@ -9,10 +9,15 @@ if (!isset($_SERVER['HTTPS'])) {
     die();
 }
 
+if (isset($_SESSION['email'])) {
+    $_SESSION['is_admin'] = isUserAdmin($_SESSION['email']);
+} else {
+    $_SESSION['is_admin'] = 0;
+}
+
 // Set login session vars to zero by default and if logging out
 if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
     $_SESSION['logged_in'] = 0;
-    $_SESSION['is_admin'] = 0;
     $_SESSION['id'] = 0;
     $_SESSION['name'] = 0;
     $_SESSION['email'] = 0;
@@ -45,14 +50,14 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
         -->
     <div id="g_id_onload" data-client_id="988976111145-c59o1r1o7cln4v1djb8bkgtcmvp5k66j.apps.googleusercontent.com" data-auto_prompt="false" data-callback="handleCredentialResponse">
     </div>
-    
-    
+
+
 
     <title>Elevator Down</title>
 
 </head>
 
-<body class = "full_page">
+<body class="full_page">
     <div class="topnav">
         <img src="Gold_text_black_background.png" class="mtuimage" alt="MTU Logo">
         <a class="nav_button" href="#listView">List View</a>
@@ -69,11 +74,11 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
             <?php
         } else {
             ?>
-            <div class = "logout_position">
-                <form action="index.php" method="post">
-                    <input type="submit" name="log_out" value="Log Out" class="logout_button">
-                </form>
-            </div>
+                <div class="logout_position">
+                    <form action="index.php" method="post">
+                        <input type="submit" name="log_out" value="Log Out" class="logout_button">
+                    </form>
+                </div>
             <?php
         }
             ?>
@@ -86,14 +91,14 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
     <br>
     <div class="main_div">
         <h3>Website in Testing Phase</h3>
-        
+
         <p id='invalid'>
-        Your email is not from the doman "mtu.edu"<br>
-        You may view elevator status, but please sign-in with a valid email
-        to make reports.
+            Your email is not from the doman "mtu.edu"<br>
+            You may view elevator status, but please sign-in with a valid email
+            to make reports.
         </p>
         <script>
-            var invalid = <?php echo isset($_SESSION['invalid'])?1:0; ?>;
+            var invalid = <?php echo isset($_SESSION['invalid']) ? 1 : 0; ?>;
             var element = document.getElementById('invalid');
             if (1 == invalid) {
                 element.style.display = 'block';
@@ -126,22 +131,33 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
                     ?>
                 </form>
 
-        <?php
+            <?php
+            } else if (isElevatorVerified($elevator['id']) && $_SESSION['logged_in'] && $_SESSION['is_admin']) {
+            ?>
+                <form action="report.php" method="post">
+                    <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
+                    <input type="submit" class="form_button" name="unverify" value="Bring Elevator Up">
+                </form>
+            <?php
             }
             $i = 0;
             foreach ($elevatorReports as $report) {
-                ?><div class = "<?php if (($i % 2)) { echo 'downReport2'; } else { echo 'downReport1'; }?>"><?php
-                echo "  <p>Report " . $report['id'] . " (" . $report['reporter'] . "): " . $report['comment']  . "</p>";
-                ?></div> <?php
-                $i++;
-            }
-        }
-        ?>
+            ?><div class="<?php if (($i % 2)) {
+                                    echo 'downReport2';
+                                } else {
+                                    echo 'downReport1';
+                                } ?>"><?php
+                                                                                                            echo "  <p>Report " . $report['id'] . " (" . $report['reporter'] . "): " . $report['comment']  . "</p>";
+                                                                                                            ?></div> <?php
+                            $i++;
+                        }
+                    }
+                            ?>
     </div>
-<br><br>
+    <br><br>
 </body>
 
-                <!--
+<!--
      - Form that let's me send the user information in POST
      - I'm sending it to login.php so I can handle all the rest of the login
      - there instead of cluttering this one even more.
@@ -149,46 +165,46 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
      - I'm also putting all this in the bottom on purpose, but if you want to
      - move it feel free
     -->
-                <form id="send_payload" action="https://mtuelevatordown.000webhostapp.com/login.php" method="post">
-                    <input type="hidden" id="id" name="id" value="default"></input>
-                    <input type="hidden" id="name" name="name" value="default"></input>
-                    <input type="hidden" id="email" name="email" value="default"></input>
-                </form>
+<form id="send_payload" action="https://mtuelevatordown.000webhostapp.com/login.php" method="post">
+    <input type="hidden" id="id" name="id" value="default"></input>
+    <input type="hidden" id="name" name="name" value="default"></input>
+    <input type="hidden" id="email" name="email" value="default"></input>
+</form>
 
-                <!--
+<!--
      - Below is all the javascript that get's the credntial, decrypts it, formats
      - it into the above form, and then submits it.
     -->
-                <script>
-                    // Get's the response from Google's sign-in API, calls another function
-                    // to decode it, then formats the information into the form.
-                    function handleCredentialResponse(response) {
+<script>
+    // Get's the response from Google's sign-in API, calls another function
+    // to decode it, then formats the information into the form.
+    function handleCredentialResponse(response) {
 
-                        const responsePayload = decodeJwtResponse(response.credential);
+        const responsePayload = decodeJwtResponse(response.credential);
 
-                        document.getElementById("id").setAttribute("value", responsePayload.sub);
-                        document.getElementById("name").setAttribute("value", responsePayload.name);
-                        document.getElementById("email").setAttribute("value", responsePayload.email);
-                        document.getElementById("send_payload").submit();
+        document.getElementById("id").setAttribute("value", responsePayload.sub);
+        document.getElementById("name").setAttribute("value", responsePayload.name);
+        document.getElementById("email").setAttribute("value", responsePayload.email);
+        document.getElementById("send_payload").submit();
 
-                    }
+    }
 
-                    // Don't even ask about this one, I have no clue, it was just copy pasted
-                    // from where Google told me to look to validate manually
-                    function decodeJwtResponse(credential) {
+    // Don't even ask about this one, I have no clue, it was just copy pasted
+    // from where Google told me to look to validate manually
+    function decodeJwtResponse(credential) {
 
-                        var isValid = KJUR.jws.JWS.verifyJWT(credential, "616161", {
-                            alg: ['HS256']
-                        });
+        var isValid = KJUR.jws.JWS.verifyJWT(credential, "616161", {
+            alg: ['HS256']
+        });
 
-                        var sJWT = credential;
-                        var headerObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(sJWT.split(".")[0]));
-                        var payloadObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(sJWT.split(".")[1]));
+        var sJWT = credential;
+        var headerObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(sJWT.split(".")[0]));
+        var payloadObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(sJWT.split(".")[1]));
 
-                        return payloadObj;
+        return payloadObj;
 
-                    }
-                </script>
+    }
+</script>
 
 
 

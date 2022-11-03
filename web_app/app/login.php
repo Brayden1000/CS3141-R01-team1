@@ -43,7 +43,6 @@ if ($result == 0) {
     addUser($email);
 }
 
-$_SESSION["is_admin"] = isUserAdmin($email);
 $_SESSION["logged_in"] = 1;
 header("Location: $HOME_URL");
 die();
