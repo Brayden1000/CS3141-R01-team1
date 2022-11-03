@@ -55,6 +55,8 @@ public class HomeFragment extends Fragment {
 
     GoogleSignInAccount account;
 
+    public static String emailAddress;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -79,8 +81,11 @@ public class HomeFragment extends Fragment {
         post = (Button) root.findViewById(R.id.post);
         request = (Button) root.findViewById(R.id.request);
 
+        emailAddress = "cooluser@mtu.edu";
+
         if(account != null && MainActivity.getData() == true){
             signin.setVisibility(View.INVISIBLE);
+            emailAddress = account.getEmail();
         }
         else {
             signin.setVisibility(View.VISIBLE);

@@ -1,11 +1,13 @@
 package com.example.cs3141_1;
 
 public class Elevator {
+    private String id;
     private String elevatorName;
     private int numberOfReports;
     private String officialStatus;
 
-    public Elevator(String elevatorName, int numberOfReports, String officialStatus){
+    public Elevator(String id, String elevatorName, int numberOfReports, String officialStatus){
+        this.id = id;
         this.elevatorName = elevatorName;
         this.numberOfReports = numberOfReports;
         this.officialStatus = officialStatus;
@@ -22,6 +24,8 @@ public class Elevator {
     public String getOfficialStatus() {
         return officialStatus;
     }
+
+    public String getId() { return id; }
 
     public void setElevatorName(String elevatorName) {
         this.elevatorName = elevatorName;

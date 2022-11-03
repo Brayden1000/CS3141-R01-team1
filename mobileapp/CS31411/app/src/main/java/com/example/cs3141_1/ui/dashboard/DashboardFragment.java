@@ -57,7 +57,8 @@ public class DashboardFragment extends Fragment {
             String elevatorName;
             String reports;
             String status;
-            sc.next(); //ignore the id
+            String id;
+            id = sc.next(); //ignore the id
             reports = sc.next();
             elevatorName = sc.next();
             if(Integer.parseInt(reports) >= downThreshold){
@@ -65,7 +66,7 @@ public class DashboardFragment extends Fragment {
             }else{
                 status = "working";
             }
-            elevators.add(new Elevator(elevatorName, Integer.parseInt(reports), status));
+            elevators.add(new Elevator(id, elevatorName, Integer.parseInt(reports), status));
         }
 
     }
@@ -75,39 +76,45 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_dashboard,container,false);
+        if(this.getActivity() == null){
 
-        String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
+            System.out.println("COULDN'T CREATE");
+        }else {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        sharedResponse(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                error.toString(), Snackbar.LENGTH_SHORT).show();
-                        Log.w("error",  error.toString());
-                    }
-                });
-        //This allows us to access the data acquired from GET request. mResponse = the data we care about
-        SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        String mResponse = m.getString("Response", "");
+            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
 
-        //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
-        infoParser(mResponse);
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            sharedResponse(response);
+                        }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
-        requestQueue.add(stringRequest);
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    error.toString(), Snackbar.LENGTH_SHORT).show();
+                            Log.w("error", error.toString());
+                        }
+                    });
+            //This allows us to access the data acquired from GET request. mResponse = the data we care about
+            SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+            String mResponse = m.getString("Response", "");
 
-        lv = (ListView) view.findViewById(R.id.listview);
-        ElevatorAdapter adapter = new ElevatorAdapter(this.getActivity(),R.layout.list_item,elevators);
-        lv.setAdapter(adapter);
+            //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
+            infoParser(mResponse);
+
+            RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+            requestQueue.add(stringRequest);
+
+            lv = (ListView) view.findViewById(R.id.listview);
+            ElevatorAdapter adapter = new ElevatorAdapter(this.getActivity(), R.layout.list_item, elevators);
+            lv.setAdapter(adapter);
+        }
         return view;
     }
 

@@ -101,7 +101,9 @@ public class Report {
                     @Override
                     public void onResponse(String response) {
                         Log.w("success", response.trim());
+                        System.out.println("THIS SHOULD BE WORKING");
                     }
+
                 },
                 new Response.ErrorListener() {
                     @Override
