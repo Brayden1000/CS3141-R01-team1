@@ -94,13 +94,13 @@ function verifyElevator($elevatorId) {
 function makeUserReport($userEmail, $elevatorId, $comment) {
     $dbh = connectDB();
 
-    $statement1 = $dbh->prepare("UPDATE ElevatorInfo SET downReports += 1  WHERE elevatorId = :elevatorId;");
+    $statement1 = $dbh->prepare("UPDATE ElevatorInfo SET downReports = downReports + 1  WHERE id = :elevatorId;");
     $statement1->bindParam(":elevatorId", $elevatorId);
 
     $statement2 = $dbh->prepare("INSERT INTO DownReports (reporter, comment, elevatorId) VALUES (:email, :comment, :eId);");
-    $statement2 = $dbh->bindParam(":email", $userEmail);
-    $statement2 = $dbh->bindParam(":comment", $comment);
-    $statement2 = $dbh->bindParam(":eId", $elevatorId);
+    $statement2->bindParam(":email", $userEmail);
+    $statement2->bindParam(":comment", $comment);
+    $statement2->bindParam(":eId", $elevatorId);
 
     $statement1->execute();
     $statement2->execute();
