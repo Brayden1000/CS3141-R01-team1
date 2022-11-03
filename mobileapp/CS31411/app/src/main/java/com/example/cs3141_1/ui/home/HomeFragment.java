@@ -51,6 +51,7 @@ public class HomeFragment extends Fragment {
     Button post;
     Button request;
 
+    String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php";
 
     GoogleSignInAccount account;
 
@@ -67,7 +68,6 @@ public class HomeFragment extends Fragment {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
 
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
@@ -90,7 +90,6 @@ public class HomeFragment extends Fragment {
         String data = "test"; //data to post
 
         post.setOnClickListener(new View.OnClickListener() {
-            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php";
             @Override
             public void onClick(View view) {
 
@@ -215,6 +214,37 @@ public class HomeFragment extends Fragment {
                 signin.setVisibility(View.INVISIBLE);
                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                         "Successfully logged in", Snackbar.LENGTH_SHORT).show();
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        "success", Snackbar.LENGTH_SHORT).show();
+                                Log.w("success", response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        error.toString(), Snackbar.LENGTH_SHORT).show();
+                                Log.w("error",  error.toString());
+                            }
+                        }) {
+
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("login", account.getEmail());
+
+                        return params;
+                    }
+                };
+
+                RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                requestQueue.add(stringRequest);
+
             }
 
 
