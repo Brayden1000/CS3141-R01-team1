@@ -1,23 +1,23 @@
 package com.example.cs3141_1;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.material.snackbar.Snackbar;
 
-/***
+/**
  * Report class
  * Simply put correct values into the constructor, and then call .send()
  */
 public class Report {
 
     // Attributes
-    private int elevatorID;
-    private String reporterEmail;
-    private String comment;
+    private final int elevatorID;
+    private final String reporterEmail;
+    private final String comment;
 
     /**
      * First constructor, takes an int id and the email, comment left out
@@ -28,6 +28,7 @@ public class Report {
 
         this.elevatorID = id;
         this.reporterEmail = email;
+        this.comment = "";
 
     }
 
@@ -78,7 +79,7 @@ public class Report {
     private String formatHeader() {
 
         String header = String.format("mobileAPI.php?verify=1&elevatorID=%s&email=%s",
-                                       String.valueOf(elevatorID), reporterEmail);
+                                       elevatorID, reporterEmail);
         if (comment != null && !comment.equals("")) {
             header = header + String.format("&%s", comment);
         }
@@ -99,17 +100,12 @@ public class Report {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //Snackbar.make(getActivity().findViewById(android.R.id.content),
-                        //"success", Snackbar.LENGTH_SHORT).show();
                         Log.w("success", response.trim());
-                        //int t = Integer.parseInt(response.trim());
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                error.toString(), Snackbar.LENGTH_SHORT).show();
                         Log.w("error",  error.toString());
                     }
                 });
