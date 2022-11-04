@@ -9,6 +9,7 @@ if (!isset($_SERVER['HTTPS'])) {
     die();
 }
 
+
 if (isset($_SESSION['email'])) {
     $_SESSION['is_admin'] = isUserAdmin($_SESSION['email']);
 } else {
