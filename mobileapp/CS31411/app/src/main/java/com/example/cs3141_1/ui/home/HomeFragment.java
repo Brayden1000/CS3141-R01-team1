@@ -81,6 +81,9 @@ public class HomeFragment extends Fragment {
         post = (Button) root.findViewById(R.id.post);
         request = (Button) root.findViewById(R.id.request);
 
+        post.setVisibility(View.INVISIBLE);
+        request.setVisibility(View.INVISIBLE);
+
         emailAddress = "cooluser@mtu.edu";
 
         if(account != null && MainActivity.getData() == true){
