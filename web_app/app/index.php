@@ -2,11 +2,22 @@
 require "db.php";
 session_start(); //Starts session to store cookies and stuff
 
+// This forces users to connect through the https protocol so that the google
+// sign in button works.
+if (!isset($_SERVER['HTTPS'])) {
+    header ("Location: https://mtuelevatordown.000webhostapp.com");
+    die();
+}
+
+if (isset($_SESSION['email'])) {
+    $_SESSION['is_admin'] = isUserAdmin($_SESSION['email']);
+} else {
+    $_SESSION['is_admin'] = 0;
+}
 
 // Set login session vars to zero by default and if logging out
 if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
     $_SESSION['logged_in'] = 0;
-    $_SESSION['is_admin'] = 0;
     $_SESSION['id'] = 0;
     $_SESSION['name'] = 0;
     $_SESSION['email'] = 0;

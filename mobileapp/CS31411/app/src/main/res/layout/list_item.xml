@@ -12,13 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/elevatorName"
-        android:layout_weight="66.6"/>
+        android:layout_weight="54
+
+"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="33.3">
+        android:layout_weight="50
+">
 
         <TextView
             android:gravity="center"
@@ -35,5 +38,11 @@
             android:id="@+id/status"
             android:layout_below="@+id/numberOfReports"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/reportBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Report" />
 
 </LinearLayout>

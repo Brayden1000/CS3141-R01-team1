@@ -51,8 +51,11 @@ public class HomeFragment extends Fragment {
     Button post;
     Button request;
 
+    String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php";
 
     GoogleSignInAccount account;
+
+    public static String emailAddress;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +71,6 @@ public class HomeFragment extends Fragment {
                 .requestEmail()
                 .build();
 
-
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
         account = GoogleSignIn.getLastSignedInAccount(getContext());
@@ -79,8 +81,11 @@ public class HomeFragment extends Fragment {
         post = (Button) root.findViewById(R.id.post);
         request = (Button) root.findViewById(R.id.request);
 
+        emailAddress = "cooluser@mtu.edu";
+
         if(account != null && MainActivity.getData() == true){
             signin.setVisibility(View.INVISIBLE);
+            emailAddress = account.getEmail();
         }
         else {
             signin.setVisibility(View.VISIBLE);
@@ -90,7 +95,6 @@ public class HomeFragment extends Fragment {
         String data = "test"; //data to post
 
         post.setOnClickListener(new View.OnClickListener() {
-            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php";
             @Override
             public void onClick(View view) {
 
@@ -137,7 +141,7 @@ public class HomeFragment extends Fragment {
                                 //Snackbar.make(getActivity().findViewById(android.R.id.content),
                                         //"success", Snackbar.LENGTH_SHORT).show();
                                 Log.w("success", response.trim());
-                                int t = Integer.parseInt(response.trim());
+                                //int t = Integer.parseInt(response.trim());
                             }
                         },
                         new Response.ErrorListener() {
@@ -215,6 +219,37 @@ public class HomeFragment extends Fragment {
                 signin.setVisibility(View.INVISIBLE);
                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                         "Successfully logged in", Snackbar.LENGTH_SHORT).show();
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        "success", Snackbar.LENGTH_SHORT).show();
+                                Log.w("success", response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        error.toString(), Snackbar.LENGTH_SHORT).show();
+                                Log.w("error",  error.toString());
+                            }
+                        }) {
+
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("login", account.getEmail());
+
+                        return params;
+                    }
+                };
+
+                RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                requestQueue.add(stringRequest);
+
             }
 
 

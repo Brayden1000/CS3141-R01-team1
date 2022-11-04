@@ -42,9 +42,10 @@ if (isset($_REQUEST['info'])) {
         
         for ($i = 0; $i < count($info); $i++) {
             
-            echo $info[$i]['id'];
-            echo $info[$i]['downReports'];
-            echo $info[$i]['location'];
+            echo "".$info[$i]['id']." ";
+            echo "".$info[$i]['downReports']." ";
+            echo "".$info[$i]['location']." ";
+            echo "\n";
             
         }
         
@@ -113,18 +114,18 @@ if (isset($_REQUEST['viewReports'])) {
     $elevID = $_REQUEST['viewReports'];
     
     $reports = getReports($elevID);
-    $numReports = count(reports);
-    echo $numReports;
+    $numReports = count($reports);
+    echo $numReports."\n";
     
     for ($i = 0; $i < $numReports; $i++) {
         
-        echo $reports[$i]['elevatorId'];
-        echo $reports[$i]['id'];
-        echo $reports[$i]['reporter'];
-        echo $reports[$i]['comment'];
+        echo "".$reports[$i]['elevatorId']."\n";
+        echo "".$reports[$i]['id']."\n";
+        echo "".$reports[$i]['reporter']."\n";
+        echo "\"".$reports[$i]['comment']."\"\n";
         
     }
     
 }
-  
+    
 ?>

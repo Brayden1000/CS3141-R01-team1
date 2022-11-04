@@ -1,7 +1,10 @@
 package com.example.cs3141_1.ui.dashboard;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,67 +15,109 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.cs3141_1.Elevator;
 import com.example.cs3141_1.ElevatorAdapter;
 import com.example.cs3141_1.R;
 import com.example.cs3141_1.databinding.FragmentDashboardBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 
 public class DashboardFragment extends Fragment {
+
 
     private FragmentDashboardBinding binding;
     ListView lv;
 
+    private Scanner sc;
+
     //SearchView searchView;
     ArrayAdapter<String> adapter;
-    String[] data = {"okay", "please work", "im dying","okay", "please work", "im dying","okay", "please work", "im dying","okay", "please work", "im dying","okay", "please work", "im dying","okay", "please work", "im dying","okay", "please work", "im dying"};
+
+    public static int downThreshold = 2;
+    private void sharedResponse(String response) {
+        SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        SharedPreferences.Editor editor = m.edit();
+        editor.putString("Response", response);
+        editor.commit();
+    }
+
+    private void infoParser(String response){
+        sc = new Scanner(response);
+
+        //This (arbitrary) threshold represents the number of reports required to mark an elevator is down
+
+
+        while(sc.hasNext()){
+            String elevatorName;
+            String reports;
+            String status;
+            String id;
+            id = sc.next(); //ignore the id
+            reports = sc.next();
+            elevatorName = sc.next();
+            if(Integer.parseInt(reports) >= downThreshold){
+                status = "not working";
+            }else{
+                status = "working";
+            }
+            elevators.add(new Elevator(id, elevatorName, Integer.parseInt(reports), status));
+        }
+
+
+    }
+
 
     ArrayList<Elevator> elevators = new ArrayList<>();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        //Hard code elevators here for now
-        Elevator e1 = new Elevator("Elevator1", 0, "working");
-        Elevator e2 = new Elevator("Elevator2", 20, "not working");
-        Elevator e3 = new Elevator("Elevator3", 3, "working");
-        Elevator e4 = new Elevator("Elevator4", 0, "working");
-        Elevator e5 = new Elevator("Elevator5", 0, "working");
-        Elevator e6 = new Elevator("Elevator6", 31, "not working");
-        Elevator e7 = new Elevator("Elevator7", 1, "working");
-        Elevator e8 = new Elevator("Elevator8", 0, "working");
-        Elevator e9 = new Elevator("Elevator9", 52, "not working");
-        Elevator e10 = new Elevator("Elevator10", 34, "not working");
-        Elevator e11 = new Elevator("Elevator11", 0, "working");
-        Elevator e12 = new Elevator("Elevator12", 0, "working");
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        //Add elevators to list
-        elevators.add(e1);
-        elevators.add(e2);
-        elevators.add(e3);
-        elevators.add(e4);
-        elevators.add(e5);
-        elevators.add(e6);
-        elevators.add(e7);
-        elevators.add(e8);
-        elevators.add(e9);
-        elevators.add(e10);
-        elevators.add(e11);
-        elevators.add(e12);
+        if(this.getActivity() == null){
 
+            System.out.println("COULDN'T CREATE");
+        }else {
 
+            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
 
-        /*This works!
-        View view = inflater.inflate(R.layout.fragment_dashboard,container,false);
-        lv = (ListView) view.findViewById(R.id.listview);
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,data);
-        lv.setAdapter(adapter);
-        */
-        View view = inflater.inflate(R.layout.fragment_dashboard,container,false);
-        lv = (ListView) view.findViewById(R.id.listview);
-        ElevatorAdapter adapter = new ElevatorAdapter(this.getActivity(),R.layout.list_item,elevators);
-        lv.setAdapter(adapter);
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            sharedResponse(response);
+                        }
+
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    error.toString(), Snackbar.LENGTH_SHORT).show();
+                            Log.w("error", error.toString());
+                        }
+                    });
+            //This allows us to access the data acquired from GET request. mResponse = the data we care about
+            SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+            String mResponse = m.getString("Response", "");
+
+            //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
+            infoParser(mResponse);
+
+            RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+            requestQueue.add(stringRequest);
+
+            lv = (ListView) view.findViewById(R.id.listview);
+            ElevatorAdapter adapter = new ElevatorAdapter(this.getActivity(), R.layout.list_item, elevators);
+            lv.setAdapter(adapter);
+        }
         return view;
     }
 

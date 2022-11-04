@@ -64,8 +64,13 @@ function checkUser($email) {
 
 function verifyUser($email) {
     $dbh = connectDB();
-    $statement1 = $dbh->prepare("UPDATE UserData SET isVerified = 1 WHERE email = :email;");
+    
+    $isAdmin = isUserAdmin($email) == 1 ? 0 : 1;
+    
+    $statement1 = $dbh->prepare("UPDATE UserData SET isAdmin = :isAdmin WHERE email = :email;");
+    
     $statement1->bindParam(":email", $email);
+    $statement1->bindParam(":isAdmin", $isAdmin);
     $statement1->execute();
 
     $dbh = null;
@@ -89,15 +94,16 @@ function verifyElevator($elevatorId) {
 function makeUserReport($userEmail, $elevatorId, $comment) {
     $dbh = connectDB();
 
-    $statement1 = $dbh->prepare("UPDATE ElevatorInfo SET downReports += 1  WHERE elevatorId = :elevatorId;");
+    $statement1 = $dbh->prepare("UPDATE ElevatorInfo SET downReports = downReports + 1  WHERE id = :elevatorId;");
     $statement1->bindParam(":elevatorId", $elevatorId);
 
     $statement2 = $dbh->prepare("INSERT INTO DownReports (reporter, comment, elevatorId) VALUES (:email, :comment, :eId);");
-    $statement2 = $dbh->bindParam(":email", $userEmail);
-    $statement2 = $dbh->bindParam(":comment", $comment);
-    $statement2 = $dbh->bindParam(":eId", $elevatorId);
+    $statement2->bindParam(":email", $userEmail);
+    $statement2->bindParam(":comment", $comment);
+    $statement2->bindParam(":eId", $elevatorId);
 
     $statement1->execute();
+    $statement2->execute();
 
     $dbh = null;
 }
