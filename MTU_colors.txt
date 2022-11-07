@@ -1,0 +1,8 @@
+MTU Hex Colors
+Gold #ffcd00
+Grey #8a8b8c
+Black #000000
+There are additional colors at https://www.mtu.edu/umc/resources/brand/
+
+MTU font
+Open Sans
