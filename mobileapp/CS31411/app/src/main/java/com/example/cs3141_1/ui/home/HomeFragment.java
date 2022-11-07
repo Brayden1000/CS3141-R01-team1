@@ -227,17 +227,17 @@ public class HomeFragment extends Fragment {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        "success", Snackbar.LENGTH_SHORT).show();
+                                //Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        //"success", Snackbar.LENGTH_SHORT).show();
                                 Log.w("success", response);
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        error.toString(), Snackbar.LENGTH_SHORT).show();
-                                Log.w("error",  error.toString());
+                                //Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        //error.toString(), Snackbar.LENGTH_SHORT).show();
+                                //Log.w("error",  error.toString());
                             }
                         }) {
 
