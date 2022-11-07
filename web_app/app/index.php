@@ -110,50 +110,52 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
 
         <?php
         // Request to get Elevator Reports
-        $elevatorReportCounts = getReportNumber();
-        foreach ($elevatorReportCounts as $elevator) {
+        $elevatorReportCounts = getReportNumber(); // Calls an array of data about each elevator including Id, isVerified, and reportNum
+        foreach ($elevatorReportCounts as $elevator) { // Iterate and display section for each elevator
+            // Display proper elevator section header (depends on elevator's verified status)
             if (isElevatorVerified($elevator['id'])) {
                 echo '<h2>Elevator ' . $elevator['id'] . ' at ' . $elevator['location']  . ' is currently down.</h2>';
             } else {
                 echo '<h2>Elevator ' . $elevator['id'] . ' at ' . $elevator['location']  . ' has ' . $elevator['downReports'] . ' reports.</h2>';
             }
-            $elevatorReports = getReports($elevator['id']);
+            // The two buttons inside this if block are only shown if the user is logged in and the elevator is currently functional
             if (isElevatorVerified($elevator['id']) == 0 && $_SESSION['logged_in']) {
         ?>
                 <form action="report.php" method="post">
                     <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
-                    <input type="submit" class="form_button" name="report" value="Report Elevator">
+                    <input type="submit" class="form_button" name="report" value="Report Elevator"> <!-- This is the 'Report Elevator' button which is only shown if logged in -->
                     <?php
                     if ($_SESSION['is_admin'] && $_SESSION['logged_in']) {
                     ?>
-                        <input type="submit" class="form_button" name="verify" value="Verify Elevator Down">
+                        <input type="submit" class="form_button" name="verify" value="Verify Elevator Down"> <!-- This is the 'Verify Elevator' button which is only shown if logged in as admin -->
                     <?php
-                    }
+                    } // This may be the funniest piece of code I've written
                     ?>
                 </form>
-
             <?php
+            // The code in this if block is shown only if the user is logged in as admin and the elevator is currently verified as down
             } else if (isElevatorVerified($elevator['id']) && $_SESSION['logged_in'] && $_SESSION['is_admin']) {
             ?>
                 <form action="report.php" method="post">
                     <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
-                    <input type="submit" class="form_button" name="unverify" value="Bring Elevator Up">
+                    <input type="submit" class="form_button" name="unverify" value="Bring Elevator Up"> <!-- This is the 'Bring Elevator Up' button which is only shown if the elevator is down -->
                 </form>
             <?php
             }
+            $elevatorReports = getReports($elevator['id']); // Call array of elevator's down reports
+            // This loop displays all of the comments the current elevator
             $i = 0;
             foreach ($elevatorReports as $report) {
-            ?><div class="<?php if (($i % 2)) {
-                                    echo 'downReport2';
-                                } else {
-                                    echo 'downReport1';
-                                } ?>"><?php
-                                                                                                            echo "  <p>Report " . $report['id'] . " (" . $report['reporter'] . "): " . $report['comment']  . "</p>";
-                                                                                                            ?></div> <?php
-                            $i++;
-                        }
-                    }
-                            ?>
+            ?>
+                <div class="<?php echo ($i) ? 'downReport2': 'downReport1';  ?>"> <!-- Changes color of comment backgroud on alternating comments -->
+                    <!-- Report details are hidden if not an admin -->
+                    <?php echo ($_SESSION['is_admin']) ? "<p>Report " . $report['id'] . " (" . $report['reporter'] . "): " . $report['comment']  . "</p>" : " <p>Report: " . $report['comment']  . "</p>"; ?>
+                </div> 
+            <?php
+            $i = ($i) ? 0 : 1;
+            }
+        }
+        ?>
     </div>
     <br><br>
 </body>
