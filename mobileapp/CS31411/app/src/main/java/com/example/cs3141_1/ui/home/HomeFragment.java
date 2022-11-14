@@ -163,8 +163,6 @@ public class HomeFragment extends Fragment {
 
         ConfignewButton1();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
 
 

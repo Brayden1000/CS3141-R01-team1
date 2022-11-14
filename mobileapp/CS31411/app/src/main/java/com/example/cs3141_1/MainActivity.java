@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        //opendb();
 
     }
 
@@ -56,26 +55,4 @@ public class MainActivity extends AppCompatActivity {
     public static void setData(boolean bool){
         ismtuemail = bool;
     }
-
-   /* private void opendb(){
-        String link="https://mtuelevatordown.000webhostapp.com/db.php";
-        try {
-            URL url = new URL(link);
-            URLConnection conn = url.openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-
-            // Read Server Response
-            while((line = reader.readLine()) != null) {
-                sb.append(line);
-                break;
-            }
-            Log.w("test", sb.toString());
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }*/
 }
