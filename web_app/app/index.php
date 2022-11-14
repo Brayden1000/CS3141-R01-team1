@@ -121,8 +121,9 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
             // The two buttons inside this if block are only shown if the user is logged in and the elevator is currently functional
             if (isElevatorVerified($elevator['id']) == 0 && $_SESSION['logged_in']) {
         ?>
-                <form action="report.php" method="post">
+                <form onsubmit='target_popup(this)' action="report.php" method="post">
                     <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
+                    <input type="hidden" name="report_elevator_location" value="<?php echo $elevator['location']; ?>">
                     <input type="submit" class="form_button" name="report" value="Report Elevator"> <!-- This is the 'Report Elevator' button which is only shown if logged in -->
                     <?php
                     if ($_SESSION['is_admin'] && $_SESSION['logged_in']) {
@@ -138,6 +139,7 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
             ?>
                 <form action="report.php" method="post">
                     <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
+                    <input type="hidden" name="report_elevator_location" value="<?php echo $elevator['location']; ?>">
                     <input type="submit" class="form_button" name="unverify" value="Bring Elevator Up"> <!-- This is the 'Bring Elevator Up' button which is only shown if the elevator is down -->
                 </form>
             <?php
@@ -206,6 +208,11 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
 
         return payloadObj;
 
+    }
+    
+    function target_popup(form) {
+        window.open('https://mtuelevatordown.000webhostapp.com/report.php', 'formpopup', 'width=600,height=600');
+        form.target = 'formpopup';
     }
 </script>
 
