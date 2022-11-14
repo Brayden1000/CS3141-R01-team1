@@ -121,18 +121,21 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
             // The two buttons inside this if block are only shown if the user is logged in and the elevator is currently functional
             if (isElevatorVerified($elevator['id']) == 0 && $_SESSION['logged_in']) {
         ?>
-                <form onsubmit='target_popup(this)' action="report.php" method="post">
-                    <input type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
-                    <input type="hidden" name="report_elevator_location" value="<?php echo $elevator['location']; ?>">
-                    <input type="submit" class="form_button" name="report" value="Report Elevator"> <!-- This is the 'Report Elevator' button which is only shown if logged in -->
+                <form style="display: inline-block" onsubmit='target_popup(this)' action="report.php" method="post">
+                    <input style="display: inline-block" type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
+                    <input style="display: inline-block" type="hidden" name="report_elevator_location" value="<?php echo $elevator['location']; ?>">
+                    <input style="display: inline-block" type="submit" class="form_button" name="report" value="Report Elevator"> <!-- This is the 'Report Elevator' button which is only shown if logged in -->
+                </form>
                     <?php
                     if ($_SESSION['is_admin'] && $_SESSION['logged_in']) {
                     ?>
-                        <input type="submit" class="form_button" name="verify" value="Verify Elevator Down"> <!-- This is the 'Verify Elevator' button which is only shown if logged in as admin -->
+                        <form style="display: inline-block" action="report.php" method="post">
+                            <input style="display: inline-block" type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
+                            <input style="display: inline-block" type="submit" class="form_button" name="verify" value="Verify Elevator Down"> <!-- This is the 'Verify Elevator' button which is only shown if logged in as admin -->
+                        </form>
                     <?php
                     } // This may be the funniest piece of code I've written
                     ?>
-                </form>
             <?php
             // The code in this if block is shown only if the user is logged in as admin and the elevator is currently verified as down
             } else if (isElevatorVerified($elevator['id']) && $_SESSION['logged_in'] && $_SESSION['is_admin']) {

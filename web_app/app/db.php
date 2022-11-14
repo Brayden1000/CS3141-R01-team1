@@ -76,18 +76,30 @@ function verifyUser($email) {
     $dbh = null;
 }
 
-function verifyElevator($elevatorId) {
+function verifyElevator($elevatorId, $email) {
     $dbh = connectDB();
 
     $statement1 = $dbh->prepare("UPDATE ElevatorInfo
-                                 SET isDownVerified = 1, timeSinceVerified = :timeSince, whoVerified = :email
-                                WHERE elevatorId = :elevatorId;");
+                                 SET isDownVerified = 1, whoVerified = :email
+                                WHERE id = :elevatorId;");
     $statement1->bindParam(":elevatorId", $elevatorId);
     $statement1->bindParam(":email", $email);
-    $statement1->bindParam(":timeSince", time());
 
     $statement1->execute();
 
+    $dbh = null;
+}
+
+function unverifyElevator($elevatorId) {
+    $dbh = connectDB();
+    
+    $statement = $dbh->prepare("UPDATE ElevatorInfo
+                                SET isDownVerified = 0, whoVerified = NULL
+                                WHERE id = :elevatorId;");
+    $statement->bindParam(":elevatorId", $elevatorId);
+    
+    $statement->execute();
+    
     $dbh = null;
 }
 
