@@ -2,6 +2,7 @@
 require "db.php";
 session_start(); //Starts session to store cookies and stuff
 
+if (isset($_POST['report'])) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,9 +18,6 @@ session_start(); //Starts session to store cookies and stuff
         </style>
     </head>
     
-<?php
-if (isset($_POST['report'])) {
-?>
     <body class="full_page">
         <div class="main_div">
             <h1> <span>
@@ -42,12 +40,18 @@ if (isset($_POST['report'])) {
     
 
 <?php 
-} else if (isset($_POST['verify']) || isset($_POST['unverify'])) {
-?>
-
+} else if (isset($_POST['verify'])) {
     
-
-<?php 
+    verifyElevator($_POST['report_elevator_id'], $_SESSION['email']);
+    header("Location: /index.php");
+    die();
+    
+} else if (isset($_POST['unverify'])) {
+    
+    unverifyElevator($_POST['report_elevator_id']);
+    header("Location: /index.php");
+    die();
+    
 }
 ?>
 
