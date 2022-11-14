@@ -2,49 +2,53 @@
 require "db.php";
 session_start(); //Starts session to store cookies and stuff
 
-echo "Elevator Id: ". $_POST['report_elevator_id'];
-
-/* debugging stuff*/
-// print_r($_SESSION);
-
-// If this page is called for an user report, show this [report session variable set in index.php]
-if (isset($_POST['report'])) {
 ?>
-
 <!DOCTYPE html>
 <html>
+    
     <head>
+        <link rel="stylesheet" href="style.css">
         <title>Report</title>
+        
+        <style>
+            textarea {
+                resize: none;
+            }
+        </style>
     </head>
-
-    <body>
-        <h1>Elevator Down: Report</h1>
-        <br>
-        <h3>Website in Testing Phase</h3>
-
-        <br><br><br><p>Report stuff and add comment stuff here</p>
+    
+<?php
+if (isset($_POST['report'])) {
+?>
+    <body class="full_page">
+        <div class="main_div">
+            <h1> <span>
+                You are reporting Elevator <?php echo $_POST['report_elevator_id']; ?> -
+                <?php echo str_replace("_", " ", $_POST['report_elevator_location']); ?>
+            </span> </h1> 
+            <br>
+            <p>
+                (Optional) Please add your specific issue below.
+            </p>
+            
+            <form action="process.php" method="post">
+                <input type="hidden" name="report_id" value="<?php echo $_POST['report_elevator_id']; ?>">
+                <textarea name="comment" maxlength="255" rows="10" cols="80"></textarea>
+                <br>
+                <input type="submit" value="Submit" class="form_button">
+            </form>
+        </div>
     </body>
-</html>
+    
 
 <?php 
-// If this page is called for an admin report, show this [report session variable set in index.php]
-} else if (isset($_POST['verify'])) {
+} else if (isset($_POST['verify']) || isset($_POST['unverify'])) {
 ?>
 
-<html>
-    <head>
-        <title>Report</title>
-    </head>
-
-    <body>
-        <h1>Admin Report</h1>
-        <br>
-        <h3>Website in Testing Phase</h3>
-
-        <br><br><br><p>Are you sure you want to report this elevator as down?</p>
-    </body>
-</html>
+    
 
 <?php 
 }
 ?>
+
+</html>
