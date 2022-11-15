@@ -137,3 +137,9 @@ Grey #8a8b8c
 .reportElevator {
     margin-left: 20px;
 }
+
+.map_container {
+    float: center;
+    width: 100%;
+    height: 900px;
+}

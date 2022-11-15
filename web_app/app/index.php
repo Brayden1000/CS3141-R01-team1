@@ -61,8 +61,8 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
 <body class="full_page">
     <div class="topnav">
         <img src="Gold_text_black_background.png" class="mtuimage" alt="MTU Logo">
-        <a class="nav_button" href="#index.php">List View</a>
-        <a class="nav_button" href="#mapView">Map View</a>
+        <a class="nav_button" href="index.php">List View</a>
+        <a class="nav_button" href="map.php">Map View</a>
 
         <!--
             - This div is what actual renders the login button, feel free to move
