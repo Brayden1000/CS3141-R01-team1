@@ -12,9 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/elevatorName"
-        android:layout_weight="54
-
-"/>
+        android:layout_weight="54"
+        android:textSize="15dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        />
 
     <LinearLayout
         android:orientation="vertical"
@@ -28,7 +30,8 @@
             android:text="TextView2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:id="@+id/numberOfReports"/>
+            android:id="@+id/numberOfReports"
+            android:textColor="@color/black"/>
 
         <TextView
             android:gravity="center"
@@ -36,13 +39,15 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:id="@+id/status"
-            android:layout_below="@+id/numberOfReports"/>
+            android:layout_below="@+id/numberOfReports"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/reportBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Report" />
+        android:text="Report"
+        android:backgroundTint="@color/gold"/>
 
 </LinearLayout>

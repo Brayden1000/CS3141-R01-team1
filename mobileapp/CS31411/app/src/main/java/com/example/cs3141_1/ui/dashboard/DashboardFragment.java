@@ -2,6 +2,7 @@ package com.example.cs3141_1.ui.dashboard;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -65,6 +66,7 @@ public class DashboardFragment extends Fragment {
             elevatorName = sc.next();
             if(Integer.parseInt(reports) >= downThreshold){
                 status = "not working";
+                
             }else{
                 status = "working";
             }

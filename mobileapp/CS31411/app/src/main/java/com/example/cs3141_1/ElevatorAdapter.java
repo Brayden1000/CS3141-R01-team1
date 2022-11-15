@@ -2,6 +2,8 @@ package com.example.cs3141_1;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,50 +73,57 @@ public class ElevatorAdapter extends ArrayAdapter<Elevator> {
         tvStatus.setText("Status: " + elevatorStatus);
         Button reportBtn = (Button) convertView.findViewById(R.id.reportBtn);
         RequestQueue requestQueue = Volley.newRequestQueue(convertView.getContext());
-        if(!hasBeenClicked) {
-            reportBtn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    hasBeenClicked = true;
-                    if (HomeFragment.emailAddress != null) {
-                        String URL = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?viewReports=" + id.toString();
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        Log.w("success", response.trim());
-                                        //if the user has NOT already reported the elevator, send report
-                                        if (!checkExistingReport(response, HomeFragment.emailAddress)) {
-                                            //create report and send request to webserver
-                                            Report report = new Report(id, HomeFragment.emailAddress);
-                                            report.send(requestQueue);
+        System.out.println("hasBeenClicked = " + hasBeenClicked);
 
-                                            //modify the client side version of the # of reports
-                                            getItem(position).setNumberOfReports(elevatorReports + 1);
-                                            tvReports.setText("Reports: " + String.valueOf(elevatorReports + 1));
+        reportBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (HomeFragment.emailAddress != null) {
+                    String URL = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?viewReports=" + id.toString();
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                            new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.w("success", response.trim());
+                            //if the user has NOT already reported the elevator, send report
+                            if (!checkExistingReport(response, HomeFragment.emailAddress)) {
+                                //create report and send request to webserver
+                                Report report = new Report(id, HomeFragment.emailAddress);
+                                report.send(requestQueue);
 
-                                            //modify the client side version of the status
-                                            if (elevatorReports + 1 >= DashboardFragment.downThreshold) {
-                                                getItem(position).setOfficialStatus("not working");
-                                                tvStatus.setText("Status: " + "not working");
-                                            }
+                                //modify the client side version of the # of reports
+                                getItem(position).setNumberOfReports(elevatorReports + 1);
+                                tvReports.setText("Reports: " + String.valueOf(elevatorReports + 1));
 
-                                        } else {
-                                            System.out.println("THIS USER HAS ALREADY REPORTED THIS ELEVATOR");
-                                        }
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.w("error", error.toString());
-                                    }
-                                });
+                                //modify the client side version of the status
+                                if (elevatorReports + 1 >= DashboardFragment.downThreshold) {
+                                    getItem(position).setOfficialStatus("not working");
+                                    tvStatus.setText("Status: " + "not working");
+                                }
+                            } else {
+                                System.out.println("THIS USER HAS ALREADY REPORTED THIS ELEVATOR");
+                            }
+                        }
+                        },
+                            new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.w("error", error.toString());
+                        }
+                    });
 
-                        requestQueue.add(stringRequest);
-                    }
-
+                    requestQueue.add(stringRequest);
                 }
-            });
+            }
+        });
+        if(tvStatus.getText().equals("Status: not working")){
+            tvStatus.setText(Html.fromHtml("Status: " + "<font color=#FF0000>" + "not working" + "</font><br><br>"));
+        }else if(tvStatus.getText().equals("Status: working")){
+            tvStatus.setText(Html.fromHtml("Status: " + "<font color=#13B05F>" + "working" + "</font><br><br>"));
+        }
+        if (position % 2 == 1) {
+            convertView.setBackgroundColor(Color.argb(255,156,182,208));
+        } else {
+            convertView.setBackgroundColor(Color.argb(255,201,210,218));
         }
         return convertView;
     }
