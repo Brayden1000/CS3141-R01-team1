@@ -61,7 +61,7 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
 <body class="full_page">
     <div class="topnav">
         <img src="Gold_text_black_background.png" class="mtuimage" alt="MTU Logo">
-        <a class="nav_button" href="#listView">List View</a>
+        <a class="nav_button" href="#index.php">List View</a>
         <a class="nav_button" href="#mapView">Map View</a>
 
         <!--
@@ -86,12 +86,8 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
             </div>
     </div>
 
-    <h1>
-
-    </h1>
-    <br>
     <div class="main_div">
-        <h3>Website in Testing Phase</h3>
+        <h3 class = "title">Elevator Down?</h3>
 
         <p id='invalid'>
             Your email is not from the doman "mtu.edu"<br>
@@ -121,7 +117,7 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
             // The two buttons inside this if block are only shown if the user is logged in and the elevator is currently functional
             if (isElevatorVerified($elevator['id']) == 0 && $_SESSION['logged_in']) {
         ?>
-                <form style="display: inline-block" onsubmit='target_popup(this)' action="report.php" method="post">
+                <form class="reportElevator" style="display: inline-block" onsubmit='target_popup(this)' action="report.php" method="post">
                     <input style="display: inline-block" type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
                     <input style="display: inline-block" type="hidden" name="report_elevator_location" value="<?php echo $elevator['location']; ?>">
                     <input style="display: inline-block" type="submit" class="form_button" name="report" value="Report Elevator"> <!-- This is the 'Report Elevator' button which is only shown if logged in -->
