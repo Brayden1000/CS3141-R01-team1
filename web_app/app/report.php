@@ -26,7 +26,13 @@ if (isset($_POST['process'])) {
 
 if (isset($_POST['report']) || isset($_GET['report'])) {
     $report_elevator_id = (isset($_POST['report'])) ? $_POST['report_elevator_id'] : $_GET['report_elevator_id'];
-    $report_elevator_location = (isset($_POST['report'])) ? $_POST['report_elevator_location'] : $_GET['report_elevator_location']
+    $report_elevator_location = (isset($_POST['report'])) ? $_POST['report_elevator_location'] : $_GET['report_elevator_location'];
+
+	foreach (getReportNumber() as $elevator) {
+		if ($elevator['id'] == $report_elevator_id) {
+			$report_num = $elevator['downReports'];
+		}
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -47,7 +53,8 @@ if (isset($_POST['report']) || isset($_GET['report'])) {
             <h1> <span>
                 You are reporting Elevator <?php echo $report_elevator_id; ?> -
                 <?php echo str_replace("_", " ", $report_elevator_location); ?>
-            </span> </h1> 
+            </span> </h1>
+			<h1>Reports: <?php echo $report_num; ?></h1> 
             <br>
             <p>
                 (Optional) Please add your specific issue below.
