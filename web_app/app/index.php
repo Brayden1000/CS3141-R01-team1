@@ -110,16 +110,16 @@ if (!isset($_SESSION['logged_in']) || isset($_POST['log_out'])) {
         foreach ($elevatorReportCounts as $elevator) { // Iterate and display section for each elevator
             // Display proper elevator section header (depends on elevator's verified status)
             if (isElevatorVerified($elevator['id'])) {
-                echo '<h2>Elevator ' . $elevator['id'] . ' at ' . $elevator['location']  . ' is currently down.</h2>';
+                echo '<h2>Elevator ' . $elevator['id'] . ' at ' . str_replace("_", " ", $elevator['location'])  . ' is currently down.</h2>';
             } else {
-                echo '<h2>Elevator ' . $elevator['id'] . ' at ' . $elevator['location']  . ' has ' . $elevator['downReports'] . ' reports.</h2>';
+                echo '<h2>Elevator ' . $elevator['id'] . ' at ' . str_replace("_", " ", $elevator['location'])  . ' has ' . $elevator['downReports'] . ' reports.</h2>';
             }
             // The two buttons inside this if block are only shown if the user is logged in and the elevator is currently functional
             if (isElevatorVerified($elevator['id']) == 0 && $_SESSION['logged_in']) {
         ?>
                 <form class="reportElevator" style="display: inline-block" onsubmit='target_popup(this)' action="report.php" method="post">
                     <input style="display: inline-block" type="hidden" name="report_elevator_id" value="<?php echo $elevator['id']; ?>">
-                    <input style="display: inline-block" type="hidden" name="report_elevator_location" value="<?php echo $elevator['location']; ?>">
+                    <input style="display: inline-block" type="hidden" name="report_elevator_location" value="<?php echo str_replace("_", " ", $elevator['location']); ?>">
                     <input style="display: inline-block" type="submit" class="form_button" name="report" value="Report Elevator"> <!-- This is the 'Report Elevator' button which is only shown if logged in -->
                 </form>
                     <?php

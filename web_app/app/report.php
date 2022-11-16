@@ -2,6 +2,28 @@
 require "db.php";
 session_start(); //Starts session to store cookies and stuff
 
+if (isset($_POST['process'])) {
+    
+        
+    $email = $_SESSION['email'];
+    $id = $_POST['report_id'];
+    $comment = $_POST['comment'];
+    
+    makeUserReport($email, $id, $comment);
+    
+?>
+
+    <script>
+        window.opener.location.reload();
+        window.close();
+    </script>
+
+<?php
+    
+    die();
+    
+}
+
 if (isset($_POST['report']) || isset($_GET['report'])) {
     $report_elevator_id = (isset($_POST['report'])) ? $_POST['report_elevator_id'] : $_GET['report_elevator_id'];
     $report_elevator_location = (isset($_POST['report'])) ? $_POST['report_elevator_location'] : $_GET['report_elevator_location']
@@ -31,7 +53,8 @@ if (isset($_POST['report']) || isset($_GET['report'])) {
                 (Optional) Please add your specific issue below.
             </p>
             
-            <form action="process.php" method="post">
+            <form action="/report.php" method="post">
+                <input type="hidden" name="process" value="1">
                 <input type="hidden" name="report_id" value="<?php echo $report_elevator_id; ?>">
                 <textarea name="comment" maxlength="255" rows="10" cols="80"></textarea>
                 <br>
@@ -40,7 +63,6 @@ if (isset($_POST['report']) || isset($_GET['report'])) {
         </div>
     </body>
     
-
 <?php 
 } else if (isset($_POST['verify'])) {
     
