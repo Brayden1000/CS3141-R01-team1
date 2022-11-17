@@ -33,7 +33,6 @@ public class ElevatorAdapter extends ArrayAdapter<Elevator> {
 
     private Context mContext;
     int mResource;
-    boolean hasBeenClicked;
 
     private boolean checkExistingReport(String reports, String email){
         Scanner sc = new Scanner(reports);
@@ -50,7 +49,6 @@ public class ElevatorAdapter extends ArrayAdapter<Elevator> {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
-        hasBeenClicked = false;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
@@ -58,6 +56,7 @@ public class ElevatorAdapter extends ArrayAdapter<Elevator> {
         int elevatorReports = getItem(position).getNumberOfReports();
         String elevatorStatus = getItem(position).getOfficialStatus();
         String id = getItem(position).getId();
+        boolean alreadyReported = getItem(position).getAlreadyReported();
 
         Elevator elevator = new Elevator(id, elevatorName, elevatorReports, elevatorStatus);
 
@@ -73,45 +72,52 @@ public class ElevatorAdapter extends ArrayAdapter<Elevator> {
         tvStatus.setText("Status: " + elevatorStatus);
         Button reportBtn = (Button) convertView.findViewById(R.id.reportBtn);
         RequestQueue requestQueue = Volley.newRequestQueue(convertView.getContext());
-        System.out.println("hasBeenClicked = " + hasBeenClicked);
+
 
         reportBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (HomeFragment.emailAddress != null) {
-                    String URL = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?viewReports=" + id.toString();
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
-                            new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.w("success", response.trim());
-                            //if the user has NOT already reported the elevator, send report
-                            if (!checkExistingReport(response, HomeFragment.emailAddress)) {
-                                //create report and send request to webserver
-                                Report report = new Report(id, HomeFragment.emailAddress);
-                                report.send(requestQueue);
+                if(!getItem(position).getAlreadyReported()) {
 
-                                //modify the client side version of the # of reports
-                                getItem(position).setNumberOfReports(elevatorReports + 1);
-                                tvReports.setText("Reports: " + String.valueOf(elevatorReports + 1));
+                    getItem(position).setAlreadyReported();
 
-                                //modify the client side version of the status
-                                if (elevatorReports + 1 >= DashboardFragment.downThreshold) {
-                                    getItem(position).setOfficialStatus("not working");
-                                    tvStatus.setText("Status: " + "not working");
-                                }
-                            } else {
-                                System.out.println("THIS USER HAS ALREADY REPORTED THIS ELEVATOR");
-                            }
-                        }
-                        },
-                            new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.w("error", error.toString());
-                        }
-                    });
+                    if (HomeFragment.emailAddress != null) {
+                        String URL = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?viewReports=" + id.toString();
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        Log.w("success", response.trim());
+                                        //if the user has NOT already reported the elevator, send report
+                                        if (!checkExistingReport(response, HomeFragment.emailAddress)) {
+                                            //create report and send request to webserver
+                                            Report report = new Report(id, HomeFragment.emailAddress);
+                                            report.send(requestQueue);
 
-                    requestQueue.add(stringRequest);
+                                            //modify the client side version of the # of reports
+                                            getItem(position).setNumberOfReports(elevatorReports + 1);
+                                            tvReports.setText("Reports: " + String.valueOf(elevatorReports + 1));
+
+                                            //modify the client side version of the status
+                                            if (elevatorReports + 1 >= DashboardFragment.downThreshold) {
+                                                getItem(position).setOfficialStatus("not working");
+                                                tvStatus.setText("Status: " + "not working");
+                                            }
+                                        } else {
+                                            System.out.println("THIS USER HAS ALREADY REPORTED THIS ELEVATOR");
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.w("error", error.toString());
+                                    }
+                                });
+
+                        requestQueue.add(stringRequest);
+                    }
+                }else{
+                    System.out.println("ALREADY REPORTED boolean was set to true");
                 }
             }
         });
