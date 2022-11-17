@@ -44,7 +44,7 @@ public class DashboardFragment extends Fragment {
 
     public static int downThreshold = 2;
     private void sharedResponse(String response) {
-        SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         SharedPreferences.Editor editor = m.edit();
         editor.putString("Response", response);
         editor.commit();
@@ -70,20 +70,26 @@ public class DashboardFragment extends Fragment {
             }else{
                 status = "working";
             }
+            System.out.println("elevatorName = " + elevatorName);
             elevators.add(new Elevator(id, elevatorName, Integer.parseInt(reports), status));
         }
 
+        System.out.println("after parser called: " + elevators.get(0).getElevatorName());
+        System.out.println("elevator array length = " + elevators.size());
+    }
+
+    public void testRead(String response){
+        System.out.println("Test read HEY WE'RE PRINTING RESPONSE TO A STRING: " + response);
 
     }
 
 
     ArrayList<Elevator> elevators = new ArrayList<>();
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        System.out.println("This happens before crash should occur\n");
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        if(this.getActivity() == null){
+        if(getActivity() == null || getContext() == null){
 
             System.out.println("COULDN'T CREATE");
         }else {
@@ -94,7 +100,13 @@ public class DashboardFragment extends Fragment {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            sharedResponse(response);
+                            //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
+                            infoParser(response);
+                            //sharedResponse(response); BUSTED
+                            //Create the listview
+                            lv = (ListView) view.findViewById(R.id.listview);
+                            ElevatorAdapter adapter = new ElevatorAdapter(getActivity(), R.layout.list_item, elevators);
+                            lv.setAdapter(adapter);
                         }
 
                     },
@@ -106,20 +118,26 @@ public class DashboardFragment extends Fragment {
                             Log.w("error", error.toString());
                         }
                     });
+            //BUSTED CODE, will probably delete
             //This allows us to access the data acquired from GET request. mResponse = the data we care about
-            SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-            String mResponse = m.getString("Response", "");
+            //SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+            //String mResponse = m.getString("Response", "");
 
             //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
-            infoParser(mResponse);
+            //infoParser(mResponse);
 
             RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
             requestQueue.add(stringRequest);
 
+            //System.out.println("after parser called: " + elevators.get(0).getElevatorName());
+            /*
             lv = (ListView) view.findViewById(R.id.listview);
             ElevatorAdapter adapter = new ElevatorAdapter(this.getActivity(), R.layout.list_item, elevators);
             lv.setAdapter(adapter);
+
+             */
         }
+        System.out.println("OUTSIDE elevator array length = " + elevators.size());
         return view;
     }
 
