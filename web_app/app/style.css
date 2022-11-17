@@ -37,7 +37,7 @@ Grey #8a8b8c
     padding: 20px;
     float: right;
     position: relative;
-    right: 50px;
+    /* right: 50px; */
     top: 14px;
 
     /* text-align: right; */
@@ -49,7 +49,7 @@ Grey #8a8b8c
     position: relative;
     float: right;
     top: 30px;
-    right: 150px;
+    right: 63px;
     width: 50px;
 }
 
@@ -68,8 +68,8 @@ Grey #8a8b8c
 }
 
 .nav_button {
-    position: relative;
-    float: center;
+    /* position:fixed; */
+    float: right;
     left: 300px;
     bottom: 40px;
 
@@ -77,7 +77,8 @@ Grey #8a8b8c
     background-color: #ffcd00;
     border: 2px solid #000000;
     padding: 12px;
-    margin: 20px;
+    margin-right: 12px;
+    margin-top: 32px;
     font-weight: bold;
     text-decoration: none;
     font-size: large;
