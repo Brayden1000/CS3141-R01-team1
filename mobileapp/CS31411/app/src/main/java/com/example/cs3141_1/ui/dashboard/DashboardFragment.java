@@ -35,10 +35,9 @@ public class DashboardFragment extends Fragment {
 
 
     private FragmentDashboardBinding binding;
-    static ListView lv;
+    ListView lv;
 
     private static Scanner sc;
-    public static View view1;
 
     //SearchView searchView;
     ArrayAdapter<String> adapter;
@@ -94,42 +93,48 @@ public class DashboardFragment extends Fragment {
 
             System.out.println("COULDN'T CREATE");
         }else {
-            getElevators(view);
-            view1 = view;
-            /*String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
+            //getElevators(view);
+            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
-                            infoParser(response);
-                            //sharedResponse(response); BUSTED
-                            //Create the listview
-                            lv = (ListView) view.findViewById(R.id.listview);
-                            ElevatorAdapter adapter = new ElevatorAdapter(getActivity(), R.layout.list_item, elevators);
-                            lv.setAdapter(adapter);
-                        }
+            if(elevators.size() == 0) {
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
+                                infoParser(response);
+                                //sharedResponse(response); BUSTED
+                                //Create the listview
+                                lv = (ListView) view.findViewById(R.id.listview);
+                                ElevatorAdapter adapter = new ElevatorAdapter(getActivity(), R.layout.list_item, elevators);
+                                lv.setAdapter(adapter);
+                            }
 
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                    error.toString(), Snackbar.LENGTH_SHORT).show();
-                            Log.w("error", error.toString());
-                        }
-                    });
-            //BUSTED CODE, will probably delete
-            //This allows us to access the data acquired from GET request. mResponse = the data we care about
-            //SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-            //String mResponse = m.getString("Response", "");
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        error.toString(), Snackbar.LENGTH_SHORT).show();
+                                Log.w("error", error.toString());
+                            }
+                        });
+                //BUSTED CODE, will probably delete
+                //This allows us to access the data acquired from GET request. mResponse = the data we care about
+                //SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+                //String mResponse = m.getString("Response", "");
 
-            //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
-            //infoParser(mResponse);
+                //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
+                //infoParser(mResponse);
 
-            RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
-            requestQueue.add(stringRequest);
+                RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+                requestQueue.add(stringRequest);
+            }
+            else{
+                lv = (ListView) view.findViewById(R.id.listview);
+                ElevatorAdapter adapter = new ElevatorAdapter(getActivity(), R.layout.list_item, elevators);
+                lv.setAdapter(adapter);
+            }
 
             //System.out.println("after parser called: " + elevators.get(0).getElevatorName());
             /*
@@ -152,11 +157,6 @@ public class DashboardFragment extends Fragment {
                     public void onResponse(String response) {
                         //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
                         infoParser(response);
-                        //sharedResponse(response); BUSTED
-                        //Create the listview
-                        lv = (ListView) view.findViewById(R.id.listview);
-                        ElevatorAdapter adapter = new ElevatorAdapter(view.getContext(), R.layout.list_item, elevators);
-                        lv.setAdapter(adapter);
                     }
 
                 },
@@ -166,38 +166,32 @@ public class DashboardFragment extends Fragment {
                         Log.w("error", error.toString());
                     }
                 });
-        //BUSTED CODE, will probably delete
-        //This allows us to access the data acquired from GET request. mResponse = the data we care about
-        //SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        //String mResponse = m.getString("Response", "");
-
-        //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
-        //infoParser(mResponse);
 
         RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
         requestQueue.add(stringRequest);
-
-        //System.out.println("after parser called: " + elevators.get(0).getElevatorName());
-            /*
-            lv = (ListView) view.findViewById(R.id.listview);
-            ElevatorAdapter adapter = new ElevatorAdapter(this.getActivity(), R.layout.list_item, elevators);
-            lv.setAdapter(adapter);
-
-             */
     }
 
     public static int getElevatorNums(String elvname, View v){
         int i = 0;
+        int reports = -1;
         if(elevators.size() == 0){
             getElevators(v);
-        }
-        while(i < elevators.size()){
-            if(elvname.compareTo(elevators.get(i).getElevatorName()) == 0){
-                return elevators.get(i).getNumberOfReports();
+            while(i < elevators.size()){
+                if(elvname.compareTo(elevators.get(i).getElevatorName()) == 0){
+                    reports = elevators.get(i).getNumberOfReports();
+                }
+                i++;
             }
-            i++;
         }
-        return -1;
+        else {
+            while (i < elevators.size()) {
+                if (elvname.compareTo(elevators.get(i).getElevatorName()) == 0) {
+                    reports = elevators.get(i).getNumberOfReports();
+                }
+                i++;
+            }
+        }
+        return reports;
     }
 
     @Override
