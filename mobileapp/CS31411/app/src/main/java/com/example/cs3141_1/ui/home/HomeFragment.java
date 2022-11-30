@@ -86,6 +86,14 @@ public class HomeFragment extends Fragment {
         //Elevator buttons
         sdc = (Button) root.findViewById(R.id.sdc);
 
+        sdc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //getReport("sdc");
+                Snackbar.make(getActivity().findViewById(android.R.id.content), Integer.toString(getReport("sdc")), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
         emailAddress = "cooluser@mtu.edu";
 
         if(account != null && MainActivity.getData() == true){
@@ -99,6 +107,12 @@ public class HomeFragment extends Fragment {
         ConfignewButton1();
 
         return root;
+    }
+
+    private int getReport(String elevator_name){
+        //get the amount of reports for that elevator
+
+        return 0;
     }
 
     private void ConfignewButton1(){
