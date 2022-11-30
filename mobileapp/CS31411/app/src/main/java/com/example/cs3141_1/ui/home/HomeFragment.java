@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,12 +46,13 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
 
     GoogleSignInClient mGoogleSignInClient;
-
+    ScaleGestureDetector scaleGestureDetector;
     private FragmentHomeBinding binding;
 
     SignInButton signin;
     Button post;
     Button request;
+    ImageView image;
 
     String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php";
 
@@ -77,6 +80,9 @@ public class HomeFragment extends Fragment {
 
         //Button
         signin = (SignInButton) root.findViewById(R.id.sign_in_button);
+        image = root.findViewById(R.id.map);
+
+        //Zoomy.Builder
 
         post = (Button) root.findViewById(R.id.post);
         request = (Button) root.findViewById(R.id.request);
