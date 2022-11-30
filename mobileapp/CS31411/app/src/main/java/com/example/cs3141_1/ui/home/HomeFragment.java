@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.cs3141_1.MainActivity;
 import com.example.cs3141_1.R;
 import com.example.cs3141_1.databinding.FragmentHomeBinding;
+import com.example.cs3141_1.ui.dashboard.DashboardFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -60,6 +61,7 @@ public class HomeFragment extends Fragment {
     GoogleSignInAccount account;
 
     public static String emailAddress;
+    public static View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        root = binding.getRoot();
 
         //Google stuff
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -90,7 +92,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //getReport("sdc");
-                Snackbar.make(getActivity().findViewById(android.R.id.content), Integer.toString(getReport("sdc")), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getActivity().findViewById(android.R.id.content), Integer.toString(getReport("Forestry_Building")), Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -111,8 +113,7 @@ public class HomeFragment extends Fragment {
 
     private int getReport(String elevator_name){
         //get the amount of reports for that elevator
-
-        return 0;
+        return DashboardFragment.getElevatorNums(elevator_name, root);
     }
 
     private void ConfignewButton1(){

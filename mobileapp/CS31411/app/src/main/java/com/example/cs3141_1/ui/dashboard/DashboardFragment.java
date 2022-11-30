@@ -35,9 +35,10 @@ public class DashboardFragment extends Fragment {
 
 
     private FragmentDashboardBinding binding;
-    ListView lv;
+    static ListView lv;
 
-    private Scanner sc;
+    private static Scanner sc;
+    public static View view1;
 
     //SearchView searchView;
     ArrayAdapter<String> adapter;
@@ -50,7 +51,7 @@ public class DashboardFragment extends Fragment {
         editor.commit();
     }
 
-    private void infoParser(String response){
+    private static void infoParser(String response){
         sc = new Scanner(response);
 
         //This (arbitrary) threshold represents the number of reports required to mark an elevator is down
@@ -84,7 +85,7 @@ public class DashboardFragment extends Fragment {
     }
 
 
-    ArrayList<Elevator> elevators = new ArrayList<>();
+    static ArrayList<Elevator> elevators = new ArrayList<>();
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         System.out.println("This happens before crash should occur\n");
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -93,8 +94,9 @@ public class DashboardFragment extends Fragment {
 
             System.out.println("COULDN'T CREATE");
         }else {
-
-            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
+            getElevators(view);
+            view1 = view;
+            /*String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
                     new Response.Listener<String>() {
@@ -139,6 +141,63 @@ public class DashboardFragment extends Fragment {
         }
         System.out.println("OUTSIDE elevator array length = " + elevators.size());
         return view;
+    }
+
+    public static void getElevators(View view){
+        String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
+                        infoParser(response);
+                        //sharedResponse(response); BUSTED
+                        //Create the listview
+                        lv = (ListView) view.findViewById(R.id.listview);
+                        ElevatorAdapter adapter = new ElevatorAdapter(view.getContext(), R.layout.list_item, elevators);
+                        lv.setAdapter(adapter);
+                    }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.w("error", error.toString());
+                    }
+                });
+        //BUSTED CODE, will probably delete
+        //This allows us to access the data acquired from GET request. mResponse = the data we care about
+        //SharedPreferences m = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        //String mResponse = m.getString("Response", "");
+
+        //infoParser parses the data and adds Elevator objects to the ArrayList<Elevator> according to the parsed data
+        //infoParser(mResponse);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+        requestQueue.add(stringRequest);
+
+        //System.out.println("after parser called: " + elevators.get(0).getElevatorName());
+            /*
+            lv = (ListView) view.findViewById(R.id.listview);
+            ElevatorAdapter adapter = new ElevatorAdapter(this.getActivity(), R.layout.list_item, elevators);
+            lv.setAdapter(adapter);
+
+             */
+    }
+
+    public static int getElevatorNums(String elvname, View v){
+        int i = 0;
+        if(elevators.size() == 0){
+            getElevators(v);
+        }
+        while(i < elevators.size()){
+            if(elvname.compareTo(elevators.get(i).getElevatorName()) == 0){
+                return elevators.get(i).getNumberOfReports();
+            }
+            i++;
+        }
+        return -1;
     }
 
     @Override
