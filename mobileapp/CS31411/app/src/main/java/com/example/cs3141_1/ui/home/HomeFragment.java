@@ -50,9 +50,10 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     SignInButton signin;
-    Button post;
-    Button request;
     ImageView image;
+
+    //Elevator buttons
+    Button sdc;
 
     String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php";
 
@@ -78,17 +79,12 @@ public class HomeFragment extends Fragment {
 
         account = GoogleSignIn.getLastSignedInAccount(getContext());
 
-        //Button
+        //google button
         signin = (SignInButton) root.findViewById(R.id.sign_in_button);
         image = root.findViewById(R.id.map);
 
-        //Zoomy.Builder
-
-        post = (Button) root.findViewById(R.id.post);
-        request = (Button) root.findViewById(R.id.request);
-
-        post.setVisibility(View.INVISIBLE);
-        request.setVisibility(View.INVISIBLE);
+        //Elevator buttons
+        sdc = (Button) root.findViewById(R.id.sdc);
 
         emailAddress = "cooluser@mtu.edu";
 
@@ -100,78 +96,9 @@ public class HomeFragment extends Fragment {
             signin.setVisibility(View.VISIBLE);
         }
 
-       // URL to call
-        String data = "test"; //data to post
-
-        post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        "success", Snackbar.LENGTH_SHORT).show();
-                                Log.w("success", response);
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        error.toString(), Snackbar.LENGTH_SHORT).show();
-                                Log.w("error",  error.toString());
-                            }
-                        }) {
-
-                    @Override
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("data", data);
-
-                        return params;
-                    }
-                };
-
-                RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
-                requestQueue.add(stringRequest);
-            }
-        });
-
-        request.setOnClickListener(new View.OnClickListener() {
-            String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
-            @Override
-            public void onClick(View view) {
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                //Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        //"success", Snackbar.LENGTH_SHORT).show();
-                                Log.w("success", response.trim());
-                                //int t = Integer.parseInt(response.trim());
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        error.toString(), Snackbar.LENGTH_SHORT).show();
-                                Log.w("error",  error.toString());
-                            }
-                        });
-
-                RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
-                requestQueue.add(stringRequest);
-            }
-        });
-
         ConfignewButton1();
 
         return root;
-
-
     }
 
     private void ConfignewButton1(){
