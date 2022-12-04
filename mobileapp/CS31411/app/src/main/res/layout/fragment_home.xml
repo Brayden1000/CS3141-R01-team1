@@ -7,6 +7,41 @@
     tools:context=".ui.home.HomeFragment">
 
 
+    <!--
+    <com.example.cs3141_1.ScrollTextView
+
+        android:id="@+id/horizontalText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="46dp" />
+    -->
+
+    <TextView
+
+        android:id="@+id/horizontalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="572dp"
+        android:background="@drawable/back"
+        android:backgroundTint="#FF7474"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="Single-line text view that scrolls automatically if the text is too long to fit in the widget"
+        android:textColor="#870000"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+    </TextView>
+
     <ImageView
         android:id="@+id/map"
         android:layout_width="800dp"
@@ -41,5 +76,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.926" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Currently Down!"
+        android:textColor="#870000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.709" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

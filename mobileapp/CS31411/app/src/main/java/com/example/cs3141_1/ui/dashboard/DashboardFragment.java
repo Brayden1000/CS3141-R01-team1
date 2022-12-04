@@ -78,9 +78,33 @@ public class DashboardFragment extends Fragment {
         System.out.println("elevator array length = " + elevators.size());
     }
 
+    public static void infoParser(String response, ArrayList<Elevator> elevators){
+        sc = new Scanner(response);
+
+        //This (arbitrary) threshold represents the number of reports required to mark an elevator is down
+
+
+        while(sc.hasNext()){
+            String elevatorName;
+            String reports;
+            String status;
+            String id;
+            id = sc.next(); //ignore the id
+            reports = sc.next();
+            elevatorName = sc.next();
+            if(Integer.parseInt(reports) >= downThreshold){
+                status = "not working";
+
+            }else{
+                status = "working";
+            }
+            System.out.println("elevatorName = " + elevatorName);
+            elevators.add(new Elevator(id, elevatorName, Integer.parseInt(reports), status));
+        }
+    }
+
     public void testRead(String response){
         System.out.println("Test read HEY WE'RE PRINTING RESPONSE TO A STRING: " + response);
-
     }
 
 

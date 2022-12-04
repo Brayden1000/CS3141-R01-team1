@@ -1,17 +1,21 @@
 package com.example.cs3141_1.ui.home;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,6 +25,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.example.cs3141_1.Elevator;
 import com.example.cs3141_1.MainActivity;
 import com.example.cs3141_1.R;
 import com.example.cs3141_1.databinding.FragmentHomeBinding;
@@ -31,6 +38,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.logging.Logger;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -39,12 +47,15 @@ import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
+
 
     GoogleSignInClient mGoogleSignInClient;
     ScaleGestureDetector scaleGestureDetector;
@@ -63,8 +74,15 @@ public class HomeFragment extends Fragment {
     public static String emailAddress;
     public static View root;
 
+    TextView horizontalText;
+
+    ArrayList<Elevator> elevators = new ArrayList<>();
+    ArrayList<Elevator> brokenElevators = new ArrayList<>();
+    boolean alreadyLoaded = false;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
 
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
@@ -106,9 +124,60 @@ public class HomeFragment extends Fragment {
             signin.setVisibility(View.VISIBLE);
         }
 
+        horizontalText = root.findViewById(R.id.horizontalText);
+        horizontalText.setSelected(true);
+        getElevators(root);
+
         ConfignewButton1();
 
         return root;
+    }
+
+
+    public void getElevators(View view){
+        String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php?info=all";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        DashboardFragment.infoParser(response, elevators);
+                        String brokenElevatorString = "";
+                        if(alreadyLoaded == false) {
+                            //prevents from adding to the list of broken elevators more than once per session
+                            alreadyLoaded = true;
+                            for (int i = 0; i < elevators.size(); i++) {
+                                if (elevators.get(i).getOfficialStatus().equals("not working")) {
+                                    brokenElevators.add(elevators.get(i));
+                                }
+                            }
+                        }
+                        for(int i = 0; i < brokenElevators.size(); i++){
+                            brokenElevatorString += brokenElevators.get(i).getElevatorName() + ",    ";
+                        }
+
+
+                        horizontalText.setText(brokenElevatorString);
+
+                        /*
+                        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.anim);
+                        horizontalText.startAnimation(animation);
+                        */
+
+
+                    }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.w("error", error.toString());
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
+        requestQueue.add(stringRequest);
     }
 
     private int getReport(String elevator_name){
