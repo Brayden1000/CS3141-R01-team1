@@ -76,6 +76,7 @@ public class DashboardFragment extends Fragment {
 
         System.out.println("after parser called: " + elevators.get(0).getElevatorName());
         System.out.println("elevator array length = " + elevators.size());
+        System.out.println("elevator 26 = " + elevators.get(25).getElevatorName());
     }
 
     public static void infoParser(String response, ArrayList<Elevator> elevators){
