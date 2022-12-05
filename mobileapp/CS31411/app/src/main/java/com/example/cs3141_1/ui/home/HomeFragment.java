@@ -127,35 +127,21 @@ public class HomeFragment extends Fragment {
                     }
 
                 }
-                //getReport("sdc");
-                /*if(elevators.indexOf("Student_Development_Complex") != -1) {
-
-                }
-                else{
-                    Log.w("Elevator", "Elevator not found");
-                }*/
             }
         });
 
-        forestry = (Button) root.findViewById(R.id.sdc);
-        sdc.setOnClickListener(new View.OnClickListener() {
+        forestry = (Button) root.findViewById(R.id.forestry);
+        forestry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int t =0;
                 for (int i = 0; i < elevators.size(); i++) {
-                    if (elevators.get(i).getElevatorName().compareTo("Student_Development_Complex")==0) {
-                        Snackbar.make(getActivity().findViewById(android.R.id.content), "Student Development Complex: "  + elevators.get(i).getNumberOfReports(), Snackbar.LENGTH_SHORT).show();
+                    if (elevators.get(i).getElevatorName().compareTo("Forestry_Building")==0) {
+                        Snackbar.make(getActivity().findViewById(android.R.id.content), "Forestry Building: "  + elevators.get(i).getNumberOfReports(), Snackbar.LENGTH_SHORT).show();
                         break;
                     }
 
                 }
-                //getReport("sdc");
-                /*if(elevators.indexOf("Student_Development_Complex") != -1) {
-
-                }
-                else{
-                    Log.w("Elevator", "Elevator not found");
-                }*/
             }
         });
 
