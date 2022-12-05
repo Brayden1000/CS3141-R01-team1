@@ -61,6 +61,7 @@ public class HomeFragment extends Fragment {
 
     //Elevator buttons
     Button sdc;
+    Button forestry;
 
     String urlString = "https://mtuelevatordown.000webhostapp.com/mobileAPI.php";
 
@@ -98,17 +99,6 @@ public class HomeFragment extends Fragment {
         signin = (SignInButton) root.findViewById(R.id.sign_in_button);
         image = root.findViewById(R.id.map);
 
-        //Elevator buttons
-        sdc = (Button) root.findViewById(R.id.sdc);
-
-        sdc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //getReport("sdc");
-                Snackbar.make(getActivity().findViewById(android.R.id.content), Integer.toString(getReport("Forestry_Building")), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
         emailAddress = "cooluser@mtu.edu";
 
         if(account != null && MainActivity.getData() == true){
@@ -122,6 +112,52 @@ public class HomeFragment extends Fragment {
         horizontalText = root.findViewById(R.id.horizontalText);
         horizontalText.setSelected(true);
         getElevators(root);
+
+
+        //Elevator buttons
+        sdc = (Button) root.findViewById(R.id.sdc);
+        sdc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int t =0;
+                for (int i = 0; i < elevators.size(); i++) {
+                    if (elevators.get(i).getElevatorName().compareTo("Student_Development_Complex")==0) {
+                        Snackbar.make(getActivity().findViewById(android.R.id.content), "Student Development Complex: "  + elevators.get(i).getNumberOfReports(), Snackbar.LENGTH_SHORT).show();
+                        break;
+                    }
+
+                }
+                //getReport("sdc");
+                /*if(elevators.indexOf("Student_Development_Complex") != -1) {
+
+                }
+                else{
+                    Log.w("Elevator", "Elevator not found");
+                }*/
+            }
+        });
+
+        forestry = (Button) root.findViewById(R.id.sdc);
+        sdc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int t =0;
+                for (int i = 0; i < elevators.size(); i++) {
+                    if (elevators.get(i).getElevatorName().compareTo("Student_Development_Complex")==0) {
+                        Snackbar.make(getActivity().findViewById(android.R.id.content), "Student Development Complex: "  + elevators.get(i).getNumberOfReports(), Snackbar.LENGTH_SHORT).show();
+                        break;
+                    }
+
+                }
+                //getReport("sdc");
+                /*if(elevators.indexOf("Student_Development_Complex") != -1) {
+
+                }
+                else{
+                    Log.w("Elevator", "Elevator not found");
+                }*/
+            }
+        });
 
         ConfignewButton1();
 
