@@ -157,6 +157,19 @@ function getReportNumber() {
     return $arr;
 }
 
+// returns the number of reports for the passed elevator
+function getReportCount($elevatorId) {
+    $dbh = connectDB();
+    
+    $statement1 = $dbh->prepare("SELECT count(elevatorId) FROM DownReports WHERE elevatorId = :eId;");
+    $statement1->bindParam(":eId", $elevatorId);
+    $statement1->execute();
+
+    $dbh = null;
+
+    return $statement1->fetch();
+}
+
 function isElevatorVerified($elevatorId) {
     $dbh = connectDB();
 
