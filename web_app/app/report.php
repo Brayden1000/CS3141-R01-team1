@@ -12,14 +12,23 @@ require 'PHPMailer/src/SMTP.php';
 
 session_start(); //Starts session to store cookies and stuff
 
+// Closes parent window of popup in case of map-view
+if (!isset($_POST['report']) && !isset($_POST['process']) && isset($_SESSION['close'])) {
+    echo "super cool stuff";
+    unset($_SESSION['close']);
+    ?> <script>
+        window.close();
+    </script> <?php 
+    die();
+}
+
+// Send automated email if threshold reached and make report
 if (isset($_POST['process'])) {
-    
     // Make report
     $email = $_SESSION['email'];
     $id = $_POST['report_id'];
     $comment = $_POST['comment'];
     makeUserReport($email, $id, $comment);
-
 
      // Send automated email
      $threshold = 2; 
@@ -51,62 +60,38 @@ if (isset($_POST['process'])) {
              echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
          }
      }
-    
 ?>
-
     <!-- Close Window -->
     <script>
         window.opener.location.reload();
         window.close();
     </script>
-
 <?php
-    
-    //die();
-    
+    die();   
 }
 
-if (isset($_SESSION['map'])) {
-    echo "blah";
-    unset($_SESSION['map']);
-    ?>
-    <script>
-        window.opener.location.reload();
-        window.close();
-    </script>
-    <?php
-    die();
-}
-
+// Opens popup window in the case of map-view
 if (isset($_GET['report'])) {
-    echo "test";
-    $_SESSION['map'] = 1;
+    $_SESSION['close'] = 1;
+    unset($_GET['report'])
     ?>
-    <form id = "RedirectGet" onsubmit='target_popup(this)' action="/report.php" method="post">
+    <form id = "RedirectGet" action="/report.php" method="post" target='formpopup'>
     <input type="hidden" name="report_elevator_id" value="<?php echo $_GET['report_elevator_id']; ?>">
     <input type="hidden" name="report_elevator_location" value="<?php echo str_replace("_", " ", $_GET['report_elevator_location']); ?>">
     <input type="hidden" name="report" value="Report Elevator">
     <input type="hidden" name="testing" value="hello">
-    <input type="submit">
     </form>
 
     <script type="text/javascript">
-        function target_popup(form) {
-            window.open('https://mtuelevatordown.000webhostapp.com/report.php', 'formpopup', 'width=600,height=600');
-            form.target = 'formpopup';
-        }
-
-        //document.getElementById('RedirectGet').submit(); // SUBMIT FORM
+        window.open('https://mtuelevatordown.000webhostapp.com/report.php', 'formpopup', 'width=600,height=600');
+        document.getElementById('RedirectGet').submit(); // SUBMIT FORM
     </script>
 
     <?php
 }
 
+// Renders Report Page
 if (isset($_POST['report'])) {
-    
-    if (isset($_POST['testing'])) {
-        echo $_POST['testing'];
-    }
     
     $report_elevator_id = $_POST['report_elevator_id'];
     $report_elevator_location = $_POST['report_elevator_location'];
@@ -116,7 +101,12 @@ if (isset($_POST['report'])) {
 			$report_num = $elevator['downReports'];
 		}
 	}
+    
 ?>
+<!-- Close Window -->
+<script>
+    window.opener.location.reload();
+</script>
 <!DOCTYPE html>
 <html>
     
