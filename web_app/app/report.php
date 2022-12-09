@@ -47,7 +47,7 @@ if (isset($_POST['process'])) {
         
              //Recipients
              $mail->setFrom('mtuelevatordown@gmail.com', 'Elevator Report');
-             $mail->addAddress('wralberg@mtu.edu');              
+             $mail->addAddress(getAdmin());              
         
              //Content
              $mail->isHTML(true);                                  //Set email format to HTML
