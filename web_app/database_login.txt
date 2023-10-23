@@ -1,5 +1,5 @@
 Database name: website_appdata
 Database username: id19695733_cs3141_team
-Database password: 2EWF]5524y11
+Database password: [PLEASE CHANGE YOUR SECRET AND DO NOT STORE IT PUBLICLY]
 
 Website: https://databases.000webhost.com/

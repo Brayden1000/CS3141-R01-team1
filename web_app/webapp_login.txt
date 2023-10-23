@@ -1,4 +1,4 @@
 Username: MTUElevatorDown
-Password: cs3141_project
+Password: [PLEASE CHANGE YOUR SECRET AND DO NOT STORE IT PUBLICLY]
 
 URL: https://files.000webhost.com/
